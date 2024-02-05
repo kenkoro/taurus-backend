@@ -1,9 +1,8 @@
 package com.kenkoro.taurus.api.client.data
 
-import com.kenkoro.taurus.api.client.DataSourceType
 import com.kenkoro.taurus.api.client.exception.EnvException
 
-object DataSourceManager {
+object DataSourceService {
   fun credentials(dataSourceType: DataSourceType): Triple<String, String, String> {
     return when (dataSourceType) {
       DataSourceType.POSTGRES_TEST -> {

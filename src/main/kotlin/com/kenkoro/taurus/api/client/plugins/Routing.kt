@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.plugins
 
-import com.kenkoro.taurus.api.client.DataSourceType
+import com.kenkoro.taurus.api.client.data.DataSourceType
 import com.kenkoro.taurus.api.client.data.UserDataSource
 import com.kenkoro.taurus.api.client.data.remote.PostgresUserDataSource
 import com.kenkoro.taurus.api.client.data.repository.UserRepository
