@@ -2,18 +2,21 @@ package com.kenkoro.taurus.api.client.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.kenkoro.taurus.api.client.exception.EnvException
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.response.*
 
 fun Application.configureSecurity() {
-  // Please read the jwt property from the config file if you are using EngineMain
-  val jwtAudience = "jwt-audience"
-  val jwtDomain = "https://jwt-provider-domain/"
-  val jwtRealm = "ktor sample app"
-  val jwtSecret = "secret"
+  val jwtAudience = environment.config.property("jwt.audience").getString()
+  val jwtDomain = environment.config.property("jwt.domain").getString()
+  val jwtRealm = environment.config.property("jwt.realm").getString()
+  val jwtSecret = System.getenv("JWT_SECRET") ?: throw EnvException("The secret jwt key wasn't provided")
+
   authentication {
-    jwt {
+    jwt("jwt.auth") {
       realm = jwtRealm
       verifier(
         JWT
@@ -22,9 +25,27 @@ fun Application.configureSecurity() {
           .withIssuer(jwtDomain)
           .build()
       )
+
       validate { credential ->
-        if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+        if (isAudienceValid(credential, jwtAudience) && isIssuerValid(credential, jwtDomain)) {
+          JWTPrincipal(credential.payload)
+        } else null
+      }
+
+      challenge { _, realm ->
+        call.respond(
+          status = HttpStatusCode.Unauthorized,
+          message = "Token is not valid or has expired. Realm: $realm"
+        )
       }
     }
   }
+}
+
+fun isAudienceValid(credential: JWTCredential, audience: String): Boolean {
+  return credential.payload.audience.contains(audience)
+}
+
+fun isIssuerValid(credential: JWTCredential, issuer: String): Boolean {
+  return credential.payload.issuer.contains(issuer)
 }

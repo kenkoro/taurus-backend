@@ -1,4 +1,4 @@
-package com.kenkoro.taurus.api.client.db
+package com.kenkoro.taurus.api.client.exception
 
 /**
  * An exception class which is used when a local environment
