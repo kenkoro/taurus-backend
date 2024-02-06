@@ -12,7 +12,7 @@ class SHA256HashingService : HashingService {
   override fun hash(password: String, saltLength: Int): SaltedHash {
     val salt = SecureRandom.getInstance(HashingAlgorithm.SHA1PRNG).generateSeed(saltLength)
     val saltAsHex = Hex.encodeHexString(salt)
-    val hash = DigestUtils.sha256Hex("$saltAsHex$password")
+    val hash = DigestUtils.sha256Hex("${saltAsHex}${password}")
 
     return SaltedHash(
       hashedPasswordWithSalt = hash,
@@ -21,6 +21,7 @@ class SHA256HashingService : HashingService {
   }
 
   override fun verify(password: String, saltedHash: SaltedHash): Boolean {
-    return DigestUtils.sha256Hex("${saltedHash.salt}$password") == saltedHash.hashedPasswordWithSalt
+    val hash = DigestUtils.sha256Hex("${saltedHash.salt}${password}")
+    return hash == saltedHash.hashedPasswordWithSalt
   }
 }

@@ -2,32 +2,27 @@ package com.kenkoro.taurus.api.client.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.kenkoro.taurus.api.client.exception.EnvException
+import com.kenkoro.taurus.api.client.security.token.TokenConfig
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 
-fun Application.configureSecurity() {
-  val jwtAudience = environment.config.property("jwt.audience").getString()
-  val jwtDomain = environment.config.property("jwt.domain").getString()
-  val jwtRealm = environment.config.property("jwt.realm").getString()
-  val jwtSecret = System.getenv("JWT_SECRET") ?: throw EnvException("The secret jwt key wasn't provided")
-
+fun Application.configureSecurity(config: TokenConfig) {
   authentication {
     jwt("jwt.auth") {
-      realm = jwtRealm
+      realm = config.realm
       verifier(
         JWT
-          .require(Algorithm.HMAC256(jwtSecret))
-          .withAudience(jwtAudience)
-          .withIssuer(jwtDomain)
+          .require(Algorithm.HMAC256(config.secret))
+          .withAudience(config.audience)
+          .withIssuer(config.domain)
           .build()
       )
 
       validate { credential ->
-        if (isAudienceValid(credential, jwtAudience) && isIssuerValid(credential, jwtDomain)) {
+        if (isAudienceValid(credential, config.audience) && isIssuerValid(credential, config.domain)) {
           JWTPrincipal(credential.payload)
         } else null
       }
