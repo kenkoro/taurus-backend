@@ -1,14 +1,14 @@
 package com.kenkoro.taurus.api.client.data.remote
 
 import com.kenkoro.taurus.api.client.annotation.Warning
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.FIRST_NAME
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.ID
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.IMAGE
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.LAST_NAME
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.PASSWORD
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.ROLE
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.SALT
-import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.SUBJECT
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.FIRST_NAME
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.ID
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.IMAGE
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.LAST_NAME
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.PASSWORD
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.ROLE
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.SALT
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Companion.SUBJECT
 import com.kenkoro.taurus.api.client.model.GettingUserModel
 import com.kenkoro.taurus.api.client.model.InsertingUserModel
 import com.kenkoro.taurus.api.client.model.util.UserRole
@@ -23,7 +23,7 @@ class PostgresUserDataSource(
   }
 
   override suspend fun getUserByItsSubject(subject: String): GettingUserModel {
-    val preparedStatement = db.prepareStatement("SELECT * FROM $USER_TABLE WHERE subject = ?")
+    val preparedStatement = db.prepareStatement("SELECT * FROM $USER_TABLE WHERE $SUBJECT = ?")
     preparedStatement.setString(1, subject)
     val result = preparedStatement.executeQuery()
 
@@ -47,7 +47,7 @@ class PostgresUserDataSource(
   override suspend fun createUser(model: InsertingUserModel): Boolean {
     val preparedStatement = db.prepareStatement(
       "INSERT INTO " +
-          "$USER_TABLE(subject, password, image, first_name, last_name, role, salt)" +
+          "$USER_TABLE($SUBJECT, $PASSWORD, $IMAGE, $FIRST_NAME, $LAST_NAME, $ROLE, $SALT)" +
           "VALUES (?, ?, ?, ?, ?, CAST(? AS user_role), ?)"
     )
     preparedStatement.setString(1, model.subject)
@@ -63,31 +63,87 @@ class PostgresUserDataSource(
     return updatedRows > 0
   }
 
-  override suspend fun updateUserSubject(subject: String): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserSubject(subject: String, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $SUBJECT = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, subject)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 
-  override suspend fun updateUserPassword(password: String): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserPassword(password: String, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $PASSWORD = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, password)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 
-  override suspend fun updateUserImage(image: String): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserImage(image: String, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $IMAGE = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, image)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 
-  override suspend fun updateUserFirstName(firstName: String): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserFirstName(firstName: String, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $FIRST_NAME = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, firstName)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 
-  override suspend fun updateUserLastName(lastName: String): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserLastName(lastName: String, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $LAST_NAME = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, lastName)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 
-  override suspend fun updateUserRole(role: UserRole): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserRole(role: UserRole, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $ROLE = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, role.name)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 
-  override suspend fun updateUserSalt(salt: String): Boolean {
-    TODO("Not yet implemented")
+  override suspend fun updateUserSalt(salt: String, whichUser: String): Boolean {
+    val preparedStatement = db.prepareStatement(
+      "UPDATE $USER_TABLE SET $SALT = ? WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, salt)
+    preparedStatement.setString(2, whichUser)
+
+    val updatedRows = preparedStatement.executeUpdate()
+
+    return updatedRows > 0
   }
 }

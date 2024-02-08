@@ -5,7 +5,7 @@ import com.kenkoro.taurus.api.client.model.InsertingUserModel
 import com.kenkoro.taurus.api.client.model.util.UserRole
 
 interface UserDataSource {
-  companion object Column {
+  companion object {
     const val ID = "id"
     const val SUBJECT = "subject"
     const val PASSWORD = "password"
@@ -15,20 +15,21 @@ interface UserDataSource {
     const val ROLE = "role"
     const val SALT = "salt"
   }
+
   suspend fun getUserByItsSubject(subject: String): GettingUserModel
   suspend fun createUser(insertingUser: InsertingUserModel): Boolean
 
-  suspend fun updateUserSubject(subject: String): Boolean
+  suspend fun updateUserSubject(subject: String, whichUser: String): Boolean
 
-  suspend fun updateUserPassword(password: String): Boolean
+  suspend fun updateUserPassword(password: String, whichUser: String): Boolean
 
-  suspend fun updateUserImage(image: String): Boolean
+  suspend fun updateUserImage(image: String, whichUser: String): Boolean
 
-  suspend fun updateUserFirstName(firstName: String): Boolean
+  suspend fun updateUserFirstName(firstName: String, whichUser: String): Boolean
 
-  suspend fun updateUserLastName(lastName: String): Boolean
+  suspend fun updateUserLastName(lastName: String, whichUser: String): Boolean
 
-  suspend fun updateUserRole(role: UserRole): Boolean
+  suspend fun updateUserRole(role: UserRole, whichUser: String): Boolean
 
-  suspend fun updateUserSalt(salt: String): Boolean
+  suspend fun updateUserSalt(salt: String, whichUser: String): Boolean
 }

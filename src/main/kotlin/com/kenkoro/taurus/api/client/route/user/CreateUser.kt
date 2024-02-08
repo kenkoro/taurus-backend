@@ -22,7 +22,7 @@ fun Route.createUser(
     }
 
     if (!isCredentialsValid(request)) {
-      call.respond(HttpStatusCode.UnprocessableEntity, "Credentials are not valid")
+      call.respond(HttpStatusCode.Conflict, "Credentials are not valid")
       return@post
     }
 

@@ -10,6 +10,7 @@ import com.kenkoro.taurus.api.client.di.ManualDi.provideDb
 import com.kenkoro.taurus.api.client.route.auth.login
 import com.kenkoro.taurus.api.client.route.user.createUser
 import com.kenkoro.taurus.api.client.route.user.getUserByItsSubject
+import com.kenkoro.taurus.api.client.route.user.updateUserSubject
 import com.kenkoro.taurus.api.client.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.security.hashing.SHA256HashingService
 import com.kenkoro.taurus.api.client.security.token.TokenConfig
@@ -46,5 +47,6 @@ private fun Application.configureUserRouting(
   routing {
     createUser(userRepository, hashingService)
     getUserByItsSubject(userRepository, config)
+    updateUserSubject(userRepository, config)
   }
 }

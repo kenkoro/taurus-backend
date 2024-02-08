@@ -27,7 +27,7 @@ fun Route.login(
       return@post
     }
 
-    val user = userRepository.getUserByItsSubject(request.subject)
+    val user = userRepository.user(request.subject).get()
 
     if (!isHashedPasswordValid(request.password, SaltedHash(user.password, user.salt), hashingService)) {
       call.respond(HttpStatusCode.Conflict, "Password is not valid")
