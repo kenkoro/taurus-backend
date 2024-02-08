@@ -5,5 +5,6 @@ data class TokenConfig(
   val domain: String,
   val expiresIn: Long,
   val secret: String,
-  val realm: String = "Default"
+  val realm: String = "Default",
+  val authName: String = "jwt.auth"
 )

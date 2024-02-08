@@ -1,7 +1,7 @@
 package com.kenkoro.taurus.api.client.route.auth
 
 import com.kenkoro.taurus.api.client.data.repository.UserRepository
-import com.kenkoro.taurus.api.client.model.request.SignInRequest
+import com.kenkoro.taurus.api.client.model.request.LoginRequest
 import com.kenkoro.taurus.api.client.model.response.AuthResponse
 import com.kenkoro.taurus.api.client.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.security.hashing.SaltedHash
@@ -14,6 +14,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.util.Date
 
 fun Route.login(
   userRepository: UserRepository,
@@ -21,7 +22,7 @@ fun Route.login(
   config: TokenConfig
 ) {
   post("/api/login") {
-    val request = call.receiveNullable<SignInRequest>() ?: run {
+    val request = call.receiveNullable<LoginRequest>() ?: run {
       call.respond(HttpStatusCode.BadRequest)
       return@post
     }
@@ -39,10 +40,6 @@ fun Route.login(
         TokenClaim(
           name = "sub",
           value = user.id.toString()
-        ),
-        TokenClaim(
-          name = "iat",
-          value = System.currentTimeMillis().toString()
         )
       )
     )

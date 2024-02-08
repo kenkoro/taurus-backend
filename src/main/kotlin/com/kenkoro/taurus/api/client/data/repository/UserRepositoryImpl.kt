@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.data.repository
 
-import com.kenkoro.taurus.api.client.data.UserDataSource
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource
 import com.kenkoro.taurus.api.client.model.GettingUserModel
 import com.kenkoro.taurus.api.client.model.InsertingUserModel
 

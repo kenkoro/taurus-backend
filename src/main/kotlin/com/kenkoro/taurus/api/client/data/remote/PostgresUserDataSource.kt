@@ -1,27 +1,29 @@
 package com.kenkoro.taurus.api.client.data.remote
 
-import com.kenkoro.taurus.api.client.data.UserDataSource
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.FIRST_NAME
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.ID
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.IMAGE
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.LAST_NAME
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.PASSWORD
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.ROLE
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.SALT
-import com.kenkoro.taurus.api.client.data.UserDataSource.Column.SUBJECT
+import com.kenkoro.taurus.api.client.annotation.Warning
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.FIRST_NAME
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.ID
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.IMAGE
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.LAST_NAME
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.PASSWORD
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.ROLE
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.SALT
+import com.kenkoro.taurus.api.client.data.remote.UserDataSource.Column.SUBJECT
 import com.kenkoro.taurus.api.client.model.GettingUserModel
 import com.kenkoro.taurus.api.client.model.InsertingUserModel
 import com.kenkoro.taurus.api.client.model.util.UserRole
 import java.sql.Connection
 
+@Warning("Rewrite sql queries from plain text to functions from Exposed Framework")
 class PostgresUserDataSource(
   private val db: Connection
 ) : UserDataSource {
-  /**
-   * WARNING: Rewrite sql queries to chain functions
-   */
+  companion object {
+    const val USER_TABLE = "t_user"
+  }
+
   override suspend fun getUserByItsSubject(subject: String): GettingUserModel {
-    val preparedStatement = db.prepareStatement("SELECT * FROM t_user WHERE subject = ?")
+    val preparedStatement = db.prepareStatement("SELECT * FROM $USER_TABLE WHERE subject = ?")
     preparedStatement.setString(1, subject)
     val result = preparedStatement.executeQuery()
 
@@ -45,7 +47,7 @@ class PostgresUserDataSource(
   override suspend fun createUser(model: InsertingUserModel): Boolean {
     val preparedStatement = db.prepareStatement(
       "INSERT INTO " +
-          "t_user(subject, password, image, first_name, last_name, role, salt)" +
+          "$USER_TABLE(subject, password, image, first_name, last_name, role, salt)" +
           "VALUES (?, ?, ?, ?, ?, CAST(? AS user_role), ?)"
     )
     preparedStatement.setString(1, model.subject)
@@ -59,5 +61,33 @@ class PostgresUserDataSource(
     val updatedRows = preparedStatement.executeUpdate()
 
     return updatedRows > 0
+  }
+
+  override suspend fun updateUserSubject(subject: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun updateUserPassword(password: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun updateUserImage(image: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun updateUserFirstName(firstName: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun updateUserLastName(lastName: String): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun updateUserRole(role: UserRole): Boolean {
+    TODO("Not yet implemented")
+  }
+
+  override suspend fun updateUserSalt(salt: String): Boolean {
+    TODO("Not yet implemented")
   }
 }

@@ -1,9 +1,9 @@
 package com.kenkoro.taurus.api.client.integration.auth
 
 import com.kenkoro.taurus.api.client.integration.auth.annotation.Integration
-import com.kenkoro.taurus.api.client.integration.auth.annotation.Warning
-import com.kenkoro.taurus.api.client.model.request.SignInRequest
-import com.kenkoro.taurus.api.client.model.request.SignUpRequest
+import com.kenkoro.taurus.api.client.annotation.Warning
+import com.kenkoro.taurus.api.client.model.request.LoginRequest
+import com.kenkoro.taurus.api.client.model.request.CreateUserRequest
 import com.kenkoro.taurus.api.client.model.util.UserRole
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -35,7 +35,7 @@ class AuthTest {
     val response = client.post("/api/create/user") {
       contentType(ContentType.Application.Json)
       setBody(
-        SignUpRequest(
+        CreateUserRequest(
           subject = "test",
           password = "test",
           image = "",
@@ -53,7 +53,7 @@ class AuthTest {
     return client.post("/api/login") {
       contentType(ContentType.Application.Json)
       setBody(
-        SignInRequest(
+        LoginRequest(
           subject = "test",
           password = "test"
         )
