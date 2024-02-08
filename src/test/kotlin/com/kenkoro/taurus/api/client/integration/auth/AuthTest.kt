@@ -1,6 +1,7 @@
 package com.kenkoro.taurus.api.client.integration.auth
 
 import com.kenkoro.taurus.api.client.integration.auth.annotation.Integration
+import com.kenkoro.taurus.api.client.integration.auth.annotation.Warning
 import com.kenkoro.taurus.api.client.model.request.SignInRequest
 import com.kenkoro.taurus.api.client.model.request.SignUpRequest
 import com.kenkoro.taurus.api.client.model.util.UserRole
@@ -17,6 +18,7 @@ import kotlin.test.assertEquals
 class AuthTest {
   @Test
   @Integration
+  @Warning("Here, should be used a fake repository, not the real one")
   fun `should sign up and sign in successfully`() = testApplication {
     val client = createClient {
       install(ContentNegotiation) {
@@ -30,7 +32,7 @@ class AuthTest {
   }
 
   private suspend fun givenTestUser(client: HttpClient) {
-    val response = client.post("/api/signUp") {
+    val response = client.post("/api/create/user") {
       contentType(ContentType.Application.Json)
       setBody(
         SignUpRequest(
@@ -48,7 +50,7 @@ class AuthTest {
   }
 
   private suspend fun whenUserSignsIn(client: HttpClient): HttpResponse {
-    return client.post("/api/signIn") {
+    return client.post("/api/login") {
       contentType(ContentType.Application.Json)
       setBody(
         SignInRequest(

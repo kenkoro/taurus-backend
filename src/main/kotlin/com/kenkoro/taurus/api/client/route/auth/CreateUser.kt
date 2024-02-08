@@ -11,11 +11,11 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.singUp(
+fun Route.createUser(
   userRepository: UserRepository,
   hashingService: HashingService
 ) {
-  post("/api/signUp") {
+  post("/api/create/user") {
     val request = call.receiveNullable<SignUpRequest>() ?: run {
       call.respond(HttpStatusCode.BadRequest)
       return@post

@@ -15,12 +15,12 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.signIn(
+fun Route.login(
   userRepository: UserRepository,
   hashingService: HashingService,
   config: TokenConfig
 ) {
-  post("/api/signIn") {
+  post("/api/login") {
     val request = call.receiveNullable<SignInRequest>() ?: run {
       call.respond(HttpStatusCode.BadRequest)
       return@post

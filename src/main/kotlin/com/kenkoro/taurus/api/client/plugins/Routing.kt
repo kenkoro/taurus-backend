@@ -6,8 +6,8 @@ import com.kenkoro.taurus.api.client.data.remote.PostgresUserDataSource
 import com.kenkoro.taurus.api.client.data.repository.UserRepository
 import com.kenkoro.taurus.api.client.data.repository.UserRepositoryImpl
 import com.kenkoro.taurus.api.client.di.ManualDi.provideDb
-import com.kenkoro.taurus.api.client.route.auth.signIn
-import com.kenkoro.taurus.api.client.route.auth.singUp
+import com.kenkoro.taurus.api.client.route.auth.login
+import com.kenkoro.taurus.api.client.route.auth.createUser
 import com.kenkoro.taurus.api.client.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.security.hashing.SHA256HashingService
 import com.kenkoro.taurus.api.client.security.token.TokenConfig
@@ -21,7 +21,7 @@ fun Application.configureAuthRouting(config: TokenConfig) {
     val userRepository: UserRepository = UserRepositoryImpl(postgresUserDataSource)
     val hashingService: HashingService = SHA256HashingService()
 
-    singUp(userRepository, hashingService)
-    signIn(userRepository, hashingService, config)
+    createUser(userRepository, hashingService)
+    login(userRepository, hashingService, config)
   }
 }
