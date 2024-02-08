@@ -14,3 +14,16 @@ data class InsertingUserModel(
   val role: UserRole,
   val salt: String
 )
+
+fun InsertingUserModel.toGettingUserModel(): GettingUserModel {
+  return GettingUserModel(
+    id = -1,
+    subject = subject,
+    password = password,
+    image = image,
+    firstName = firstName,
+    lastName = lastName,
+    role = role,
+    salt = salt
+  )
+}
