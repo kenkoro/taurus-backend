@@ -15,7 +15,7 @@ fun Route.getUserByItsSubject(
 ) {
   @Warning("Maybe you also need to check the user's role")
   authenticate(config.authName) {
-    get("/api/user/{subject?}") {
+    get("/api/user/@{subject?}") {
       val subject = call.parameters["subject"] ?: return@get call.respond(HttpStatusCode.BadRequest)
 
       val user = userRepository.user(subject).get()

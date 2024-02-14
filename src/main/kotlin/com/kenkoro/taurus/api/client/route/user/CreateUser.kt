@@ -27,8 +27,8 @@ fun Route.createUser(
     }
 
     val saltedHash = hashingService.hash(request.password)
-    val user = createUser(request, saltedHash)
-    val wasAcknowledged = userRepository.createUser(user)
+    val model = createUser(request, saltedHash)
+    val wasAcknowledged = userRepository.user(model).create()
 
     if (!wasAcknowledged) {
       call.respond(HttpStatusCode.InternalServerError, "Failed to push a new user")
