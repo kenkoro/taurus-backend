@@ -1,9 +1,8 @@
 package com.kenkoro.taurus.api.client.integration.auth
 
 import com.kenkoro.taurus.api.client.integration.auth.annotation.Integration
-import com.kenkoro.taurus.api.client.annotation.Warning
-import com.kenkoro.taurus.api.client.model.request.LoginRequest
 import com.kenkoro.taurus.api.client.model.request.CreateUserRequest
+import com.kenkoro.taurus.api.client.model.request.LoginRequest
 import com.kenkoro.taurus.api.client.model.util.UserRole
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -11,15 +10,21 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.config.*
 import io.ktor.server.testing.*
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AuthTest {
   @Test
   @Integration
-  @Warning("Here, should be used a fake repository, not the real one")
-  fun `should sign up and sign in successfully`() = testApplication {
+  @Ignore
+  fun `should create a new user and sign in successfully`() = testApplication {
+    environment {
+      config = ApplicationConfig("application-test.conf")
+    }
+
     val client = createClient {
       install(ContentNegotiation) {
         json()

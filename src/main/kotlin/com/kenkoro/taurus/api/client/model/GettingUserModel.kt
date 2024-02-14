@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GettingUserModel(
   val id: Int,
-  val subject: String,
-  val password: String,
-  val image: String,
-  @SerialName("first_name") val firstName: String,
-  @SerialName("last_name") val lastName: String,
-  val role: UserRole,
+  var subject: String,
+  var password: String,
+  var image: String,
+  @SerialName("first_name") var firstName: String,
+  @SerialName("last_name") var lastName: String,
+  var role: UserRole,
   val salt: String
 )

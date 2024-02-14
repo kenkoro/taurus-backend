@@ -2,14 +2,16 @@ package com.kenkoro.taurus.api.client.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.kenkoro.taurus.api.client.security.token.TokenConfig
+import com.kenkoro.taurus.api.client.security.token.JwtTokenConfigService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 
-fun Application.configureSecurity(config: TokenConfig) {
+fun Application.configureSecurity() {
+  val config = JwtTokenConfigService.config()
+
   authentication {
     jwt(config.authName) {
       realm = config.realm

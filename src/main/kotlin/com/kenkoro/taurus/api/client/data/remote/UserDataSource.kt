@@ -18,7 +18,7 @@ interface UserDataSource {
 
   suspend fun getUserByItsSubject(subject: String): GettingUserModel
 
-  suspend fun createUser(insertingUser: InsertingUserModel): Boolean
+  suspend fun createUser(model: InsertingUserModel): Boolean
 
   suspend fun update(type: UpdateType, value: String, user: String): Int
 
