@@ -42,7 +42,7 @@ fun Route.updateUserData(
 
       val wasAcknowledged = if (isPasswordUpdateType(updateType)) {
         if (!isAdminRole(role)) {
-          call.respond(HttpStatusCode.Conflict, "Only admin user can change the password")
+          call.respond(HttpStatusCode.Conflict, "Only admin users can change the password")
           return@put
         }
 

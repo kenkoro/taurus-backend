@@ -73,4 +73,13 @@ class PostgresUserDataSource(
 
     return preparedStatement.executeUpdate()
   }
+
+  override suspend fun delete(user: String): Int {
+    val preparedStatement = db.prepareStatement(
+      "DELETE FROM $USER_TABLE WHERE $SUBJECT = ?"
+    )
+    preparedStatement.setString(1, user)
+
+    return preparedStatement.executeUpdate()
+  }
 }

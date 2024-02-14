@@ -31,11 +31,11 @@ fun Route.createUser(
     val wasAcknowledged = userRepository.user(model).create()
 
     if (!wasAcknowledged) {
-      call.respond(HttpStatusCode.InternalServerError, "Failed to push a new user")
+      call.respond(HttpStatusCode.InternalServerError, "Failed to push the new user")
       return@post
     }
 
-    call.respond(HttpStatusCode.Created, "Successfully created a new user")
+    call.respond(HttpStatusCode.Created, "Successfully created the new user")
   }
 }
 

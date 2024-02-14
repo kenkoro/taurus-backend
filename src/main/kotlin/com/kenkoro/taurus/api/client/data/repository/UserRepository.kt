@@ -17,7 +17,7 @@ interface UserRepository {
       role = UserRole.OTHERS,
       salt = ""
     )
-    var updatedRows: Int = 0
+    var changedRows: Int = 0
   }
 
   suspend fun user(subject: String): UserRepository {
@@ -39,10 +39,14 @@ interface UserRepository {
   }
 
   suspend fun wasAcknowledged(): Boolean {
-    return updatedRows > 0
+    return changedRows > 0
   }
 
-  suspend fun update(type: UpdateType, value: String): UserRepository
   suspend fun getUserByItsSubject(subject: String): GettingUserModel
+
   suspend fun createUser(model: InsertingUserModel): Boolean
+
+  suspend fun delete(): UserRepository
+
+  suspend fun update(type: UpdateType, value: String): UserRepository
 }
