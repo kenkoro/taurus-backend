@@ -31,6 +31,7 @@ fun Route.login(
 
     if (!isHashedPasswordValid(request.password, SaltedHash(user.password, user.salt), hashingService)) {
       call.respond(HttpStatusCode.Conflict, "Password is not valid")
+      return@post
     }
 
     val tokenService: TokenService = JwtTokenService()

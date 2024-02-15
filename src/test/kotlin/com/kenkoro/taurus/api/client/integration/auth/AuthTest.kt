@@ -1,72 +1,63 @@
 package com.kenkoro.taurus.api.client.integration.auth
 
-import com.kenkoro.taurus.api.client.integration.auth.annotation.Integration
+import com.kenkoro.taurus.api.client.annotation.Integration
 import com.kenkoro.taurus.api.client.model.request.CreateUserRequest
 import com.kenkoro.taurus.api.client.model.request.LoginRequest
 import com.kenkoro.taurus.api.client.model.util.UserRole
-import io.ktor.client.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
+import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
+import com.kenkoro.taurus.api.client.util.TestService.configAndEnvironment
+import com.kenkoro.taurus.api.client.util.TestService.thenHttpStatusCodeShouldMatch
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.config.*
 import io.ktor.server.testing.*
-import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class AuthTest {
   @Test
   @Integration
-  @Ignore
   fun `should create a new user and sign in successfully`() = testApplication {
-    environment {
-      config = ApplicationConfig("application-test.conf")
-    }
+    configAndEnvironment(this)
 
-    val client = createClient {
-      install(ContentNegotiation) {
-        json()
-      }
-    }
+    val model = CreateUserRequest(
+      subject = "test",
+      password = "test",
+      image = "",
+      firstName = "test",
+      lastName = "",
+      role = UserRole.ADMIN
+    )
+    givenUser(model)
 
-    givenTestUser(client)
-    val response = whenUserSignsIn(client)
-    thenSignInShouldBeSuccessful(response)
-  }
-
-  private suspend fun givenTestUser(client: HttpClient) {
-    val response = client.post("/api/create/user") {
-      contentType(ContentType.Application.Json)
-      setBody(
-        CreateUserRequest(
-          subject = "test",
-          password = "test",
-          image = "",
-          firstName = "test",
-          lastName = "",
-          role = UserRole.ADMIN
-        )
+    val response = whenUserSignsIn(
+      LoginRequest(
+        subject = model.subject,
+        password = model.password
       )
-    }
-
-    assertEquals(HttpStatusCode.Created, response.status)
+    )
+    thenHttpStatusCodeShouldMatch(expected = HttpStatusCode.Accepted, actual = response.status)
   }
 
-  private suspend fun whenUserSignsIn(client: HttpClient): HttpResponse {
-    return client.post("/api/login") {
-      contentType(ContentType.Application.Json)
-      setBody(
-        LoginRequest(
-          subject = "test",
-          password = "test"
-        )
+  @Test
+  @Integration
+  fun `should create a new user and sign in unsuccessfully`() = testApplication {
+    configAndEnvironment(this)
+
+    val model = CreateUserRequest(
+      subject = "test",
+      password = "test",
+      image = "",
+      firstName = "test",
+      lastName = "",
+      role = UserRole.ADMIN
+    )
+    givenUser(model)
+
+    val response = whenUserSignsIn(
+      LoginRequest(
+        subject = "test",
+        password = ""
       )
-    }
-  }
-
-  private fun thenSignInShouldBeSuccessful(response: HttpResponse) {
-    assertEquals(HttpStatusCode.Accepted, response.status)
+    )
+    thenHttpStatusCodeShouldMatch(expected = HttpStatusCode.Conflict, actual = response.status)
   }
 }
