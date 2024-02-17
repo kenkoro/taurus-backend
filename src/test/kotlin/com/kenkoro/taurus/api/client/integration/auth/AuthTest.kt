@@ -6,7 +6,7 @@ import com.kenkoro.taurus.api.client.model.request.LoginRequest
 import com.kenkoro.taurus.api.client.model.util.UserRole
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
-import com.kenkoro.taurus.api.client.util.TestService.configAndEnvironment
+import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
 import com.kenkoro.taurus.api.client.util.TestService.thenHttpStatusCodeShouldMatch
 import io.ktor.http.*
 import io.ktor.server.testing.*
@@ -16,7 +16,7 @@ class AuthTest {
   @Test
   @Integration
   fun `should create a new user and sign in successfully`() = testApplication {
-    configAndEnvironment(this)
+    applicationConfigAndClientPlugins(this)
 
     val model = CreateUserRequest(
       subject = "test",
@@ -40,7 +40,7 @@ class AuthTest {
   @Test
   @Integration
   fun `should create a new user and sign in unsuccessfully`() = testApplication {
-    configAndEnvironment(this)
+    applicationConfigAndClientPlugins(this)
 
     val model = CreateUserRequest(
       subject = "test",
