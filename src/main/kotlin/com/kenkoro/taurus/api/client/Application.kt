@@ -4,9 +4,10 @@ import com.kenkoro.taurus.api.client.plugins.*
 import com.kenkoro.taurus.api.client.security.token.JwtTokenConfigService
 import com.kenkoro.taurus.api.client.security.token.TokenConfig
 import io.ktor.server.application.*
+import io.ktor.server.netty.*
 
 fun main(args: Array<String>) {
-  io.ktor.server.netty.EngineMain.main(args)
+  EngineMain.main(args)
 }
 
 private fun Application.configure() {
