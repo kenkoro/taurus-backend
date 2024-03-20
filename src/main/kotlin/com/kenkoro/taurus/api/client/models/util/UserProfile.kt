@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.models.util
 
-enum class UserRole {
+enum class UserProfile {
   Admin,
   Manager,
   Customer,

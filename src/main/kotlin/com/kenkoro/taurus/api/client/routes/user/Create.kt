@@ -12,10 +12,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.createUser(
-  user: User,
+  controller: User,
   hashingService: HashingService
 ) {
-  post("/api/create/user") {
+  post("/new/user") {
     val request = call.receiveNullable<Create>() ?: run {
       call.respond(HttpStatusCode.BadRequest)
       return@post
@@ -27,8 +27,8 @@ fun Route.createUser(
     }
 
     val saltedHash = hashingService.hash(request.password)
-    val model = createUser(request, saltedHash)
-    val wasAcknowledged = user.user(model).create()
+    val model = createUserModelWithSalt(request, saltedHash)
+    val wasAcknowledged = controller.model(model).create()
 
     if (!wasAcknowledged) {
       call.respond(HttpStatusCode.InternalServerError, "Failed to push the new user")
@@ -43,17 +43,18 @@ private fun isCredentialsValid(request: Create): Boolean {
   return request.subject.isNotBlank()
       && request.password.isNotBlank()
       && request.firstName.isNotBlank()
-      && request.role.name.isNotBlank()
+      && request.profile.name.isNotBlank()
 }
 
-private fun createUser(request: Create, saltedHash: SaltedHash): CreateWithSalt {
+private fun createUserModelWithSalt(request: Create, saltedHash: SaltedHash): CreateWithSalt {
   return CreateWithSalt(
     subject = request.subject,
     password = saltedHash.hashedPasswordWithSalt,
     image = request.image,
     firstName = request.firstName,
     lastName = request.lastName,
-    role = request.role,
+    email = request.email,
+    profile = request.profile,
     salt = saltedHash.salt
   )
 }

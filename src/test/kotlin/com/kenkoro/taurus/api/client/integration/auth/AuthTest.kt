@@ -2,8 +2,8 @@ package com.kenkoro.taurus.api.client.integration.auth
 
 import com.kenkoro.taurus.api.client.annotation.Integration
 import com.kenkoro.taurus.api.client.models.request.user.Create
-import com.kenkoro.taurus.api.client.models.request.auth.Login
-import com.kenkoro.taurus.api.client.models.util.UserRole
+import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
+import com.kenkoro.taurus.api.client.models.util.UserProfile
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
@@ -24,12 +24,12 @@ class AuthTest {
       image = "",
       firstName = "test",
       lastName = "",
-      role = UserRole.Admin
+      profile = UserProfile.Admin
     )
     givenUser(model)
 
     val response = whenUserSignsIn(
-      Login(
+      LoginRequest(
         subject = model.subject,
         password = model.password
       )
@@ -48,12 +48,12 @@ class AuthTest {
       image = "",
       firstName = "test",
       lastName = "",
-      role = UserRole.Admin
+      profile = UserProfile.Admin
     )
     givenUser(model)
 
     val response = whenUserSignsIn(
-      Login(
+      LoginRequest(
         subject = "test",
         password = ""
       )

@@ -1,11 +1,11 @@
 package com.kenkoro.taurus.api.client.routes.user
 
-import com.kenkoro.taurus.api.client.services.util.UpdateType
 import com.kenkoro.taurus.api.client.controllers.User
-import com.kenkoro.taurus.api.client.models.request.user.Update
-import com.kenkoro.taurus.api.client.models.util.UserRole
 import com.kenkoro.taurus.api.client.core.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
+import com.kenkoro.taurus.api.client.models.request.user.Update
+import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.services.util.UpdateType
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -14,13 +14,13 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.updateUserData(
-  user: User,
+  controller: User,
   hashingService: HashingService,
   config: TokenConfig
 ) {
   authenticate(config.authName) {
-    put("/api/user/@{whichUser?}/edit/{data?}") {
-      val whichUser = call.parameters["whichUser"] ?: return@put call.respond(HttpStatusCode.BadRequest)
+    put("/user/@{subject?}/edit/{data?}") {
+      val subject = call.parameters["subject"] ?: return@put call.respond(HttpStatusCode.BadRequest)
       val data = call.parameters["data"] ?: return@put call.respond(HttpStatusCode.BadRequest)
       val request = call.receiveNullable<Update>() ?: run {
         call.respond(HttpStatusCode.BadRequest)
@@ -31,7 +31,7 @@ fun Route.updateUserData(
         call.respond(HttpStatusCode.Conflict, "New data are not valid")
         return@put
       }
-      val role = user.user(whichUser).get().role
+      val profile = controller.subject(subject).get().profile
 
       val updateType = try {
         UpdateType.valueOf(data.uppercase())
@@ -41,19 +41,19 @@ fun Route.updateUserData(
       }
 
       val wasAcknowledged = if (isPasswordUpdateType(updateType)) {
-        if (!isAdminRole(role)) {
-          call.respond(HttpStatusCode.Conflict, "Only admin users can change the password")
+        if (!isAdmin(profile)) {
+          call.respond(HttpStatusCode.Conflict, "Only users with admin profile can change passwords")
           return@put
         }
 
         val saltedHash = hashingService.hash(request.value)
-        user
-          .user(whichUser)
+        controller
+          .subject(subject)
           .update(updateType, saltedHash.hashedPasswordWithSalt)
-          .update(UpdateType.SALT, saltedHash.salt)
+          .update(UpdateType.Salt, saltedHash.salt)
           .wasAcknowledged()
       } else {
-        user.user(whichUser).update(updateType, request.value).wasAcknowledged()
+        controller.subject(subject).update(updateType, request.value).wasAcknowledged()
       }
 
       if (!wasAcknowledged) {
@@ -67,9 +67,9 @@ fun Route.updateUserData(
 }
 
 private fun isPasswordUpdateType(type: UpdateType): Boolean {
-  return type == UpdateType.PASSWORD
+  return type == UpdateType.Password
 }
 
-private fun isAdminRole(role: UserRole): Boolean {
-  return role == UserRole.Admin
+private fun isAdmin(role: UserProfile): Boolean {
+  return role == UserProfile.Admin
 }

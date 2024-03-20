@@ -2,9 +2,8 @@ package com.kenkoro.taurus.api.client.util
 
 import com.kenkoro.taurus.api.client.services.util.UpdateType
 import com.kenkoro.taurus.api.client.models.request.user.Create
-import com.kenkoro.taurus.api.client.models.request.auth.Login
-import com.kenkoro.taurus.api.client.models.response.Login
-import com.kenkoro.taurus.api.client.models.util.UserRole
+import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
+import com.kenkoro.taurus.api.client.models.util.UserProfile
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -98,7 +97,7 @@ object TestService {
 
     internal suspend fun createANewTestUserThenLoginAndGetSubjectAndToken(
       builder: ApplicationTestBuilder,
-      role: UserRole = UserRole.Admin
+      role: UserProfile = UserProfile.Admin
     ): Pair<String, String> {
       applicationConfigAndClientPlugins(builder)
 
@@ -108,16 +107,16 @@ object TestService {
         image = "",
         firstName = "test",
         lastName = "",
-        role = role
+        profile = role
       )
       givenUser(model)
 
       val body = whenUserSignsIn(
-        Login(
+        LoginRequest(
           subject = model.subject,
           password = model.password
         )
-      ).body<com.kenkoro.taurus.api.client.models.response.Login>()
+      ).body<com.kenkoro.taurus.api.client.models.response.LoginResponse>()
 
       return Pair(model.subject, body.token)
     }

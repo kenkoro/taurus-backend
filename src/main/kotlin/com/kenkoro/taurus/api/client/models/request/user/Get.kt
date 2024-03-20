@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.models.request.user
 
-import com.kenkoro.taurus.api.client.models.util.UserRole
+import com.kenkoro.taurus.api.client.models.util.UserProfile
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,6 +12,7 @@ data class Get(
   var image: String,
   @SerialName("first_name") var firstName: String,
   @SerialName("last_name") var lastName: String,
-  var role: UserRole,
+  val email: String,
+  var profile: UserProfile,
   val salt: String
 )

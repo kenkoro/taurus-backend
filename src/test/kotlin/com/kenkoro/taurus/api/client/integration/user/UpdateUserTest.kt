@@ -17,7 +17,7 @@ class UpdateUserTest {
     val (subject, token) = createANewTestUserThenLoginAndGetSubjectAndToken(this)
 
     val model = Update("new-test")
-    val response = token(token).whenUpdatingUser(subject, UpdateType.SUBJECT, model)
+    val response = token(token).whenUpdatingUser(subject, UpdateType.Subject, model)
 
     assertEquals(HttpStatusCode.OK, response.status)
   }

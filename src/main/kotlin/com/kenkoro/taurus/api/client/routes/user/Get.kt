@@ -10,19 +10,19 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.getUser(
-  user: User,
+  controller: User,
   config: TokenConfig
 ) {
   @Warning("Maybe you also need to check the user's role")
   authenticate(config.authName) {
-    get("/api/user/@{subject?}") {
+    get("/user/@{subject?}") {
       val subject = call.parameters["subject"] ?: return@get call.respond(HttpStatusCode.BadRequest)
 
-      val user = user.user(subject).get()
+      val fetchedUser = controller.subject(subject).get()
 
       call.respond(
         status = HttpStatusCode.OK,
-        message = user
+        message = fetchedUser
       )
     }
   }

@@ -1,9 +1,9 @@
 package com.kenkoro.taurus.api.client.services
 
-import com.kenkoro.taurus.api.client.services.util.UpdateType
-import com.kenkoro.taurus.api.client.models.request.user.Get
 import com.kenkoro.taurus.api.client.models.request.user.CreateWithSalt
-import com.kenkoro.taurus.api.client.models.util.UserRole
+import com.kenkoro.taurus.api.client.models.request.user.Get
+import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.services.util.UpdateType
 
 class FakeUserService(
   private val db: MutableList<Get> = mutableListOf()
@@ -21,7 +21,8 @@ class FakeUserService(
         image = model.image,
         firstName = model.firstName,
         lastName = model.lastName,
-        role = model.role,
+        email = model.email,
+        profile = model.profile,
         salt = model.salt
       )
     )
@@ -30,7 +31,7 @@ class FakeUserService(
   override suspend fun update(type: UpdateType, value: String, user: String): Int {
     val model = getUserByItsSubject(user)
     when (type) {
-      UpdateType.SUBJECT -> {
+      UpdateType.Subject -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = value,
@@ -38,12 +39,13 @@ class FakeUserService(
           image = model.image,
           firstName = model.firstName,
           lastName = model.lastName,
-          role = model.role,
+          email = model.email,
+          profile = model.profile,
           salt = model.salt
         )
       }
 
-      UpdateType.PASSWORD -> {
+      UpdateType.Password -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -51,12 +53,13 @@ class FakeUserService(
           image = model.image,
           firstName = model.firstName,
           lastName = model.lastName,
-          role = model.role,
+          email = model.email,
+          profile = model.profile,
           salt = model.salt
         )
       }
 
-      UpdateType.IMAGE -> {
+      UpdateType.Image -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -64,12 +67,13 @@ class FakeUserService(
           image = value,
           firstName = model.firstName,
           lastName = model.lastName,
-          role = model.role,
+          email = model.email,
+          profile = model.profile,
           salt = model.salt
         )
       }
 
-      UpdateType.FIRST_NAME -> {
+      UpdateType.FirstName -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -77,12 +81,13 @@ class FakeUserService(
           image = model.image,
           firstName = value,
           lastName = model.lastName,
-          role = model.role,
+          email = model.email,
+          profile = model.profile,
           salt = model.salt
         )
       }
 
-      UpdateType.LAST_NAME -> {
+      UpdateType.LastName -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -90,12 +95,13 @@ class FakeUserService(
           image = model.image,
           firstName = model.firstName,
           lastName = value,
-          role = model.role,
+          email = model.email,
+          profile = model.profile,
           salt = model.salt
         )
       }
 
-      UpdateType.ROLE -> {
+      UpdateType.Email -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -103,7 +109,22 @@ class FakeUserService(
           image = model.image,
           firstName = model.firstName,
           lastName = model.lastName,
-          role = UserRole.valueOf(value),
+          email = value,
+          profile = model.profile,
+          salt = model.salt
+        )
+      }
+
+      UpdateType.Profile -> {
+        db[db.indexOf(model)] = model.copy(
+          id = model.id,
+          subject = model.subject,
+          password = model.password,
+          image = model.image,
+          firstName = model.firstName,
+          lastName = model.lastName,
+          email = model.email,
+          profile = UserProfile.valueOf(value),
           salt = model.salt
         )
       }

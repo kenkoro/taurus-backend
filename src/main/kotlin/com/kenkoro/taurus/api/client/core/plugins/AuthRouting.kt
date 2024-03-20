@@ -1,7 +1,7 @@
 package com.kenkoro.taurus.api.client.core.plugins
 
 import com.kenkoro.taurus.api.client.controllers.User
-import com.kenkoro.taurus.api.client.routes.auth.login
+import com.kenkoro.taurus.api.client.routes.login.login
 import com.kenkoro.taurus.api.client.core.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.core.security.hashing.SHA256HashingService
 import com.kenkoro.taurus.api.client.core.security.token.JwtTokenConfigService

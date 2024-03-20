@@ -18,12 +18,12 @@ class UserImpl(
   }
 
   override suspend fun update(type: UpdateType, value: String): User {
-    changedRows = userService.update(type, value, User.preparedUser)
+    changedRows = userService.update(type, value, User.preparedSubject)
     return this
   }
 
   override suspend fun delete(): User {
-    changedRows = userService.delete(User.preparedUser)
+    changedRows = userService.delete(User.preparedSubject)
     return this
   }
 }

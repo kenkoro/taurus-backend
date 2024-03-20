@@ -2,7 +2,7 @@ package com.kenkoro.taurus.api.client.unit.user
 
 import com.kenkoro.taurus.api.client.annotation.Unit
 import com.kenkoro.taurus.api.client.models.request.user.Create
-import com.kenkoro.taurus.api.client.models.util.UserRole
+import com.kenkoro.taurus.api.client.models.util.UserProfile
 import com.kenkoro.taurus.api.client.util.BadRequest
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
@@ -33,7 +33,7 @@ class CreateUserTest {
         image = "",
         firstName = "",
         lastName = "",
-        role = UserRole.Others
+        profile = UserProfile.Others
       )
     )
     thenHttpStatusCodeShouldMatch(expected = HttpStatusCode.Conflict, actual = response.status)
