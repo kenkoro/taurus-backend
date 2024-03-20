@@ -1,9 +1,9 @@
 package com.kenkoro.taurus.api.client.integration.auth
 
 import com.kenkoro.taurus.api.client.annotation.Integration
-import com.kenkoro.taurus.api.client.model.request.CreateUserRequest
-import com.kenkoro.taurus.api.client.model.request.LoginRequest
-import com.kenkoro.taurus.api.client.model.util.UserRole
+import com.kenkoro.taurus.api.client.models.request.user.Create
+import com.kenkoro.taurus.api.client.models.request.auth.Login
+import com.kenkoro.taurus.api.client.models.util.UserRole
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
@@ -18,18 +18,18 @@ class AuthTest {
   fun `should create a new user and sign in successfully`() = testApplication {
     applicationConfigAndClientPlugins(this)
 
-    val model = CreateUserRequest(
+    val model = Create(
       subject = "test",
       password = "test",
       image = "",
       firstName = "test",
       lastName = "",
-      role = UserRole.ADMIN
+      role = UserRole.Admin
     )
     givenUser(model)
 
     val response = whenUserSignsIn(
-      LoginRequest(
+      Login(
         subject = model.subject,
         password = model.password
       )
@@ -42,18 +42,18 @@ class AuthTest {
   fun `should create a new user and sign in unsuccessfully`() = testApplication {
     applicationConfigAndClientPlugins(this)
 
-    val model = CreateUserRequest(
+    val model = Create(
       subject = "test",
       password = "test",
       image = "",
       firstName = "test",
       lastName = "",
-      role = UserRole.ADMIN
+      role = UserRole.Admin
     )
     givenUser(model)
 
     val response = whenUserSignsIn(
-      LoginRequest(
+      Login(
         subject = "test",
         password = ""
       )

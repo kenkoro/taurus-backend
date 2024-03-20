@@ -1,8 +1,8 @@
 package com.kenkoro.taurus.api.client
 
-import com.kenkoro.taurus.api.client.plugins.*
-import com.kenkoro.taurus.api.client.security.token.JwtTokenConfigService
-import com.kenkoro.taurus.api.client.security.token.TokenConfig
+import com.kenkoro.taurus.api.client.core.plugins.*
+import com.kenkoro.taurus.api.client.core.security.token.JwtTokenConfigService
+import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 

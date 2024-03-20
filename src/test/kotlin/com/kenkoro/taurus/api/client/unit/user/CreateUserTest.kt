@@ -1,8 +1,8 @@
 package com.kenkoro.taurus.api.client.unit.user
 
 import com.kenkoro.taurus.api.client.annotation.Unit
-import com.kenkoro.taurus.api.client.model.request.CreateUserRequest
-import com.kenkoro.taurus.api.client.model.util.UserRole
+import com.kenkoro.taurus.api.client.models.request.user.Create
+import com.kenkoro.taurus.api.client.models.util.UserRole
 import com.kenkoro.taurus.api.client.util.BadRequest
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
@@ -27,13 +27,13 @@ class CreateUserTest {
     applicationConfigAndClientPlugins(this)
 
     val response = givenUser(
-      CreateUserRequest(
+      Create(
         subject = "",
         password = "",
         image = "",
         firstName = "",
         lastName = "",
-        role = UserRole.OTHERS
+        role = UserRole.Others
       )
     )
     thenHttpStatusCodeShouldMatch(expected = HttpStatusCode.Conflict, actual = response.status)

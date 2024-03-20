@@ -1,7 +1,7 @@
 package com.kenkoro.taurus.api.client.integration.user
 
 import com.kenkoro.taurus.api.client.annotation.Integration
-import com.kenkoro.taurus.api.client.model.GettingUserModel
+import com.kenkoro.taurus.api.client.models.request.user.Get
 import com.kenkoro.taurus.api.client.util.TestService.User.createANewTestUserThenLoginAndGetSubjectAndToken
 import com.kenkoro.taurus.api.client.util.TestService.User.token
 import io.ktor.client.call.*
@@ -17,7 +17,7 @@ class GetUserTest {
     val (subject, token) = createANewTestUserThenLoginAndGetSubjectAndToken(this)
 
     val response = token(token).whenGettingUser(subject)
-    val savedUserIntoDb = response.body<GettingUserModel>()
+    val savedUserIntoDb = response.body<Get>()
 
     assertEquals(HttpStatusCode.OK, response.status)
     assertEquals(subject, savedUserIntoDb.subject)
