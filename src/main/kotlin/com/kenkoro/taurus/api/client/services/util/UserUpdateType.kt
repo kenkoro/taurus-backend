@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.services.util
 
-enum class UpdateType(val toSql: String) {
+enum class UserUpdateType(val toSql: String) {
   Subject("subject"),
   Password("password"),
   Image("image"),

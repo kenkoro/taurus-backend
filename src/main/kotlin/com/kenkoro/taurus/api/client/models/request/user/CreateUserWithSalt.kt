@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateWithSalt(
+data class CreateUserWithSalt(
   val subject: String,
   val password: String,
   val image: String,

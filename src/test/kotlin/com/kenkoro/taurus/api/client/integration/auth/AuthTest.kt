@@ -1,8 +1,8 @@
 package com.kenkoro.taurus.api.client.integration.auth
 
 import com.kenkoro.taurus.api.client.annotation.Integration
-import com.kenkoro.taurus.api.client.models.request.user.Create
 import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
+import com.kenkoro.taurus.api.client.models.request.user.CreateUser
 import com.kenkoro.taurus.api.client.models.util.UserProfile
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
@@ -18,12 +18,13 @@ class AuthTest {
   fun `should create a new user and sign in successfully`() = testApplication {
     applicationConfigAndClientPlugins(this)
 
-    val model = Create(
+    val model = CreateUser(
       subject = "test",
       password = "test",
       image = "",
       firstName = "test",
       lastName = "",
+      email = "",
       profile = UserProfile.Admin
     )
     givenUser(model)
@@ -42,12 +43,13 @@ class AuthTest {
   fun `should create a new user and sign in unsuccessfully`() = testApplication {
     applicationConfigAndClientPlugins(this)
 
-    val model = Create(
+    val model = CreateUser(
       subject = "test",
       password = "test",
       image = "",
       firstName = "test",
       lastName = "",
+      email = "",
       profile = UserProfile.Admin
     )
     givenUser(model)

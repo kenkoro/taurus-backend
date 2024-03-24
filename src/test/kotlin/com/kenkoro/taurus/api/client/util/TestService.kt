@@ -1,9 +1,10 @@
 package com.kenkoro.taurus.api.client.util
 
-import com.kenkoro.taurus.api.client.services.util.UpdateType
-import com.kenkoro.taurus.api.client.models.request.user.Create
 import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
+import com.kenkoro.taurus.api.client.models.request.user.CreateUser
+import com.kenkoro.taurus.api.client.models.response.LoginResponse
 import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -37,10 +38,6 @@ object TestService {
   }
 
   internal fun thenHttpStatusCodeShouldMatch(expected: HttpStatusCode, actual: HttpStatusCode) {
-    assertEquals(expected, actual)
-  }
-
-  internal fun thenHttpStatusMessageShouldMatch(expected: HttpStatusCode, actual: HttpStatusCode) {
     assertEquals(expected, actual)
   }
 
@@ -85,7 +82,11 @@ object TestService {
       }
     }
 
-    internal suspend inline fun <reified T> whenUpdatingUser(subject: String, data: UpdateType, body: T): HttpResponse {
+    internal suspend inline fun <reified T> whenUpdatingUser(
+      subject: String,
+      data: UserUpdateType,
+      body: T
+    ): HttpResponse {
       return client.put("/api/user/@$subject/edit/${data.toSql}") {
         contentType(ContentType.Application.Json)
         setBody(body)
@@ -101,12 +102,13 @@ object TestService {
     ): Pair<String, String> {
       applicationConfigAndClientPlugins(builder)
 
-      val model = Create(
+      val model = CreateUser(
         subject = "test",
         password = "test",
         image = "",
         firstName = "test",
         lastName = "",
+        email = "",
         profile = role
       )
       givenUser(model)
@@ -116,7 +118,7 @@ object TestService {
           subject = model.subject,
           password = model.password
         )
-      ).body<com.kenkoro.taurus.api.client.models.response.LoginResponse>()
+      ).body<LoginResponse>()
 
       return Pair(model.subject, body.token)
     }

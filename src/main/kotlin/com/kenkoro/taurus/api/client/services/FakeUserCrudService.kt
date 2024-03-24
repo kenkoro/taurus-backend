@@ -1,20 +1,20 @@
 package com.kenkoro.taurus.api.client.services
 
-import com.kenkoro.taurus.api.client.models.request.user.CreateWithSalt
-import com.kenkoro.taurus.api.client.models.request.user.Get
+import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
+import com.kenkoro.taurus.api.client.models.request.user.GetUser
 import com.kenkoro.taurus.api.client.models.util.UserProfile
-import com.kenkoro.taurus.api.client.services.util.UpdateType
+import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 
-class FakeUserService(
-  private val db: MutableList<Get> = mutableListOf()
-) : UserService {
-  override suspend fun getUserByItsSubject(subject: String): Get {
+class FakeUserCrudService(
+  private val db: MutableList<GetUser> = mutableListOf()
+) {
+  fun read(subject: String): GetUser {
     return db.find { it.subject == subject } ?: throw NoSuchElementException("User with this subject is not found")
   }
 
-  override suspend fun createUser(model: CreateWithSalt): Boolean {
+  fun create(model: CreateUserWithSalt): Boolean {
     return db.add(
-      Get(
+      GetUser(
         id = -1,
         subject = model.subject,
         password = model.password,
@@ -28,10 +28,10 @@ class FakeUserService(
     )
   }
 
-  override suspend fun update(type: UpdateType, value: String, user: String): Int {
-    val model = getUserByItsSubject(user)
+  fun update(type: UserUpdateType, value: String, subject: String): Int {
+    val model = read(subject)
     when (type) {
-      UpdateType.Subject -> {
+      UserUpdateType.Subject -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = value,
@@ -45,7 +45,7 @@ class FakeUserService(
         )
       }
 
-      UpdateType.Password -> {
+      UserUpdateType.Password -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -59,7 +59,7 @@ class FakeUserService(
         )
       }
 
-      UpdateType.Image -> {
+      UserUpdateType.Image -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -73,7 +73,7 @@ class FakeUserService(
         )
       }
 
-      UpdateType.FirstName -> {
+      UserUpdateType.FirstName -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -87,7 +87,7 @@ class FakeUserService(
         )
       }
 
-      UpdateType.LastName -> {
+      UserUpdateType.LastName -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -101,7 +101,7 @@ class FakeUserService(
         )
       }
 
-      UpdateType.Email -> {
+      UserUpdateType.Email -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -115,7 +115,7 @@ class FakeUserService(
         )
       }
 
-      UpdateType.Profile -> {
+      UserUpdateType.Profile -> {
         db[db.indexOf(model)] = model.copy(
           id = model.id,
           subject = model.subject,
@@ -136,8 +136,8 @@ class FakeUserService(
     return updatedRows
   }
 
-  override suspend fun delete(user: String): Int {
-    val wasAcknowledged = db.remove(getUserByItsSubject(user))
+  fun delete(subject: String): Int {
+    val wasAcknowledged = db.remove(read(subject))
     return if (wasAcknowledged) 1 else 0
   }
 }

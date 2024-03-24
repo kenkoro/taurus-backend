@@ -1,7 +1,7 @@
 package com.kenkoro.taurus.api.client.unit.user
 
 import com.kenkoro.taurus.api.client.annotation.Unit
-import com.kenkoro.taurus.api.client.models.request.user.Create
+import com.kenkoro.taurus.api.client.models.request.user.CreateUser
 import com.kenkoro.taurus.api.client.models.util.UserProfile
 import com.kenkoro.taurus.api.client.util.BadRequest
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
@@ -11,7 +11,7 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
 
-class CreateUserTest {
+class CreateUserRequestTestController {
   @Test
   @Unit
   fun `should respond with a bad request because of invalid request model`() = testApplication {
@@ -27,12 +27,13 @@ class CreateUserTest {
     applicationConfigAndClientPlugins(this)
 
     val response = givenUser(
-      Create(
+      CreateUser(
         subject = "",
         password = "",
         image = "",
         firstName = "",
         lastName = "",
+        email = "",
         profile = UserProfile.Others
       )
     )

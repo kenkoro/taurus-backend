@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.routes.login
 
-import com.kenkoro.taurus.api.client.controllers.User
+import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.core.security.hashing.SaltedHash
 import com.kenkoro.taurus.api.client.core.security.token.JwtTokenService
@@ -16,7 +16,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.login(
-  controller: User,
+  controller: UserController,
   hashingService: HashingService,
   config: TokenConfig
 ) {
@@ -26,7 +26,7 @@ fun Route.login(
       return@post
     }
 
-    val fetchedUser = controller.subject(request.subject).get()
+    val fetchedUser = controller.subject(request.subject).read()
 
     if (!isHashedPasswordValid(request.password, SaltedHash(fetchedUser.password, fetchedUser.salt), hashingService)) {
       call.respond(HttpStatusCode.Conflict, "Password is not valid")

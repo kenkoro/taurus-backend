@@ -3,6 +3,6 @@ package com.kenkoro.taurus.api.client.models.request.user
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Update(
+data class UpdateUser(
   val value: String
 )

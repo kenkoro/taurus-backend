@@ -1,11 +1,10 @@
 package com.kenkoro.taurus.api.client.core.di
 
 import com.kenkoro.taurus.api.client.services.DbService
-import com.kenkoro.taurus.api.client.services.FakeUserService
-import com.kenkoro.taurus.api.client.services.PostgresUserService
-import com.kenkoro.taurus.api.client.services.UserService
-import com.kenkoro.taurus.api.client.controllers.User
-import com.kenkoro.taurus.api.client.controllers.UserImpl
+import com.kenkoro.taurus.api.client.services.FakeUserCrudService
+import com.kenkoro.taurus.api.client.services.PostgresUserCrudService
+import com.kenkoro.taurus.api.client.controllers.UserController
+import com.kenkoro.taurus.api.client.controllers.UserControllerImpl
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -16,14 +15,14 @@ object ManualDi {
     return DriverManager.getConnection(url, user, password)
   }
 
-  fun providePostgresUserRepository(): User {
+  fun providePostgresUserRepository(): UserController {
     val dbConnection = provideDbConnection()
-    val postgresUserService: UserService = PostgresUserService(dbConnection)
+    val postgresUserCrudService: CrudService = PostgresUserCrudService(dbConnection)
 
-    return UserImpl(postgresUserService)
+    return UserControllerImpl(postgresUserCrudService)
   }
 
-  fun provideUserRepositoryWithFakeDataSource(): User {
-    return UserImpl(FakeUserService())
+  fun provideUserRepositoryWithFakeDataSource(): UserController {
+    return UserControllerImpl(FakeUserCrudService())
   }
 }

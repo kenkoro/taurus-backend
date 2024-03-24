@@ -1,10 +1,10 @@
 package com.kenkoro.taurus.api.client.routes.user
 
-import com.kenkoro.taurus.api.client.controllers.User
+import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.core.security.hashing.SaltedHash
-import com.kenkoro.taurus.api.client.models.request.user.Create
-import com.kenkoro.taurus.api.client.models.request.user.CreateWithSalt
+import com.kenkoro.taurus.api.client.models.request.user.CreateUser
+import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -12,11 +12,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.createUser(
-  controller: User,
+  controller: UserController,
   hashingService: HashingService
 ) {
   post("/new/user") {
-    val request = call.receiveNullable<Create>() ?: run {
+    val request = call.receiveNullable<CreateUser>() ?: run {
       call.respond(HttpStatusCode.BadRequest)
       return@post
     }
@@ -39,15 +39,15 @@ fun Route.createUser(
   }
 }
 
-private fun isCredentialsValid(request: Create): Boolean {
+private fun isCredentialsValid(request: CreateUser): Boolean {
   return request.subject.isNotBlank()
       && request.password.isNotBlank()
       && request.firstName.isNotBlank()
       && request.profile.name.isNotBlank()
 }
 
-private fun createUserModelWithSalt(request: Create, saltedHash: SaltedHash): CreateWithSalt {
-  return CreateWithSalt(
+private fun createUserModelWithSalt(request: CreateUser, saltedHash: SaltedHash): CreateUserWithSalt {
+  return CreateUserWithSalt(
     subject = request.subject,
     password = saltedHash.hashedPasswordWithSalt,
     image = request.image,
