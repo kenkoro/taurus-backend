@@ -19,6 +19,11 @@ fun Route.deleteUser(
         return@delete call.respond(HttpStatusCode.BadRequest)
       }
 
+      /*
+       * WARN: Incorrect checking
+       * - You need to know who is requesting the deletion of some user,
+       * not who to delete
+       */
       val profile = controller
         .subject(subject)
         .read().profile
