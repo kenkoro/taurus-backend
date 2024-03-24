@@ -2,7 +2,7 @@ package com.kenkoro.taurus.api.client.util
 
 import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
 import com.kenkoro.taurus.api.client.models.request.user.CreateUser
-import com.kenkoro.taurus.api.client.models.response.LoginResponse
+import com.kenkoro.taurus.api.client.models.response.login.LoginResponse
 import com.kenkoro.taurus.api.client.models.util.UserProfile
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 import io.ktor.client.*
@@ -50,21 +50,21 @@ object TestService {
     }
 
     internal suspend inline fun <reified T> givenUser(body: T): HttpResponse {
-      return client.post("/api/create/user") {
+      return client.post("/create/user") {
         contentType(ContentType.Application.Json)
         setBody(body)
       }
     }
 
     internal suspend inline fun <reified T> whenUserSignsIn(body: T): HttpResponse {
-      return client.post("/api/login") {
+      return client.post("/login") {
         contentType(ContentType.Application.Json)
         setBody(body)
       }
     }
 
     internal suspend fun whenGettingUser(subject: String): HttpResponse {
-      return client.get("/api/user/@$subject") {
+      return client.get("/user/@$subject") {
         contentType(ContentType.Application.Json)
         headers {
           append("Authorization", "Bearer $token")
@@ -72,10 +72,9 @@ object TestService {
       }
     }
 
-    internal suspend inline fun <reified T> whenDeletingUser(body: T): HttpResponse {
-      return client.delete("/api/delete/user") {
+    internal suspend inline fun whenDeletingUser(subject: String): HttpResponse {
+      return client.delete("/delete/user/@$subject") {
         contentType(ContentType.Application.Json)
-        setBody(body)
         headers {
           append("Authorization", "Bearer $token")
         }
@@ -87,7 +86,7 @@ object TestService {
       data: UserUpdateType,
       body: T
     ): HttpResponse {
-      return client.put("/api/user/@$subject/edit/${data.toSql}") {
+      return client.put("/user/@$subject/edit/${data.toSql}") {
         contentType(ContentType.Application.Json)
         setBody(body)
         headers {

@@ -1,12 +1,12 @@
 package com.kenkoro.taurus.api.client.services
 
 import com.kenkoro.taurus.api.client.models.request.order.Order
-import com.kenkoro.taurus.api.client.services.mappers.fromResult
-import com.kenkoro.taurus.api.client.services.mappers.setValues
+import com.kenkoro.taurus.api.client.core.mappers.fromResult
+import com.kenkoro.taurus.api.client.core.mappers.setValues
 import com.kenkoro.taurus.api.client.services.util.OrderUpdateType
 import java.sql.Connection
 
-class PostgresOrderCrudService(
+class PostgresOrderUserCrudService(
   private val db: Connection
 ) {
   companion object {
@@ -36,9 +36,25 @@ class PostgresOrderCrudService(
     return updatedRows > 0
   }
 
-  fun read(orderId: String): List<Order> {
+  fun read(orderId: Int): Order {
     val preparedStatement = db.prepareStatement("SELECT * FROM $TABLE WHERE $ORDER_ID = ?")
-    preparedStatement.setString(1, orderId)
+    preparedStatement.setInt(1, orderId)
+    val result = preparedStatement.executeQuery()
+
+    val orders = mutableListOf<Order>()
+    while (result.next()) {
+      orders += Order.fromResult(result)
+    }
+
+    return orders.first()
+  }
+
+  fun readAll(offset: Int, perPage: Int): List<Order> {
+    val preparedStatement = db.prepareStatement(
+      "SELECT * FROM $TABLE LIMIT ? OFFSET ?"
+    )
+    preparedStatement.setInt(1, perPage)
+    preparedStatement.setInt(2, offset)
     val result = preparedStatement.executeQuery()
 
     val orders = mutableListOf<Order>()

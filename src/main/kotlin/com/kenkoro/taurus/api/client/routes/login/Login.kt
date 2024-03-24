@@ -8,7 +8,7 @@ import com.kenkoro.taurus.api.client.core.security.token.TokenClaim
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
 import com.kenkoro.taurus.api.client.core.security.token.TokenService
 import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
-import com.kenkoro.taurus.api.client.models.response.LoginResponse
+import com.kenkoro.taurus.api.client.models.response.login.LoginResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*

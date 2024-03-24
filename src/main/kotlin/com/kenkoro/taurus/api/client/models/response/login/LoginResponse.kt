@@ -1,4 +1,4 @@
-package com.kenkoro.taurus.api.client.models.response
+package com.kenkoro.taurus.api.client.models.response.login
 
 import kotlinx.serialization.Serializable
 

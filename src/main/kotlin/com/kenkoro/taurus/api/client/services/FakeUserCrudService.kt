@@ -7,12 +7,12 @@ import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 
 class FakeUserCrudService(
   private val db: MutableList<GetUser> = mutableListOf()
-) {
-  fun read(subject: String): GetUser {
+) : UserCrudService {
+  override fun read(subject: String): GetUser {
     return db.find { it.subject == subject } ?: throw NoSuchElementException("User with this subject is not found")
   }
 
-  fun create(model: CreateUserWithSalt): Boolean {
+  override fun create(model: CreateUserWithSalt): Boolean {
     return db.add(
       GetUser(
         id = -1,
@@ -28,7 +28,7 @@ class FakeUserCrudService(
     )
   }
 
-  fun update(type: UserUpdateType, value: String, subject: String): Int {
+  override fun update(type: UserUpdateType, value: String, subject: String): Int {
     val model = read(subject)
     when (type) {
       UserUpdateType.Subject -> {
@@ -136,7 +136,7 @@ class FakeUserCrudService(
     return updatedRows
   }
 
-  fun delete(subject: String): Int {
+  override fun delete(subject: String): Int {
     val wasAcknowledged = db.remove(read(subject))
     return if (wasAcknowledged) 1 else 0
   }

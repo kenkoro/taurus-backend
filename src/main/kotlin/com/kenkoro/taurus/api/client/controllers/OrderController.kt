@@ -38,13 +38,15 @@ interface OrderController {
 
   suspend fun create(model: Order): Boolean
 
-  suspend fun read(orderId: Int): List<Order>
+  suspend fun read(orderId: Int): Order
+
+  suspend fun readAll(offset: Int, perPage: Int): List<Order>
 
   suspend fun update(type: OrderUpdateType, value: String): OrderController
 
   suspend fun delete(): OrderController
 
-  suspend fun read(): List<Order> {
+  suspend fun read(): Order {
     return read(preparedOrderId)
   }
 

@@ -3,7 +3,6 @@ package com.kenkoro.taurus.api.client.unit.user
 import com.kenkoro.taurus.api.client.annotation.Unit
 import com.kenkoro.taurus.api.client.models.request.user.CreateUser
 import com.kenkoro.taurus.api.client.models.util.UserProfile
-import com.kenkoro.taurus.api.client.util.BadRequest
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
 import com.kenkoro.taurus.api.client.util.TestService.thenHttpStatusCodeShouldMatch

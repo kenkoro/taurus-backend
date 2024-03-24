@@ -1,6 +1,5 @@
 package com.kenkoro.taurus.api.client.routes.user
 
-import com.kenkoro.taurus.api.client.core.annotations.Warning
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
 import io.ktor.http.*
@@ -13,12 +12,14 @@ fun Route.getUser(
   controller: UserController,
   config: TokenConfig
 ) {
-  @Warning("Maybe you also need to check the user's role")
   authenticate(config.authName) {
-    get("/user/@{subject?}") {
+    get("/user/{subject?}") {
       val subject = call.parameters["subject"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+      call.attributes
 
-      val fetchedUser = controller.subject(subject).read()
+      val fetchedUser = controller
+        .subject(subject)
+        .read()
 
       call.respond(
         status = HttpStatusCode.OK,

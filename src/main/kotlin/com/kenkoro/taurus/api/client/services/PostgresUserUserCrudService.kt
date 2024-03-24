@@ -3,15 +3,15 @@ package com.kenkoro.taurus.api.client.services
 import com.kenkoro.taurus.api.client.core.annotations.Warning
 import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
 import com.kenkoro.taurus.api.client.models.request.user.GetUser
-import com.kenkoro.taurus.api.client.services.mappers.fromResult
-import com.kenkoro.taurus.api.client.services.mappers.setValues
+import com.kenkoro.taurus.api.client.core.mappers.fromResult
+import com.kenkoro.taurus.api.client.core.mappers.setValues
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 import java.sql.Connection
 
 @Warning("Rewrite sql queries from plain text to functions from Exposed Framework")
-class PostgresUserCrudService(
+class PostgresUserUserCrudService(
   private val db: Connection
-) {
+) : UserCrudService {
   companion object {
     const val TABLE = "account"
     const val ID = "id"
@@ -25,7 +25,7 @@ class PostgresUserCrudService(
     const val SALT = "salt"
   }
 
-  fun create(model: CreateUserWithSalt): Boolean {
+  override fun create(model: CreateUserWithSalt): Boolean {
     val preparedStatement = db.prepareStatement(
       "INSERT INTO " +
           "$TABLE($SUBJECT, $PASSWORD, $IMAGE, $FIRST_NAME, $LAST_NAME, $EMAIL, $PROFILE, $SALT)" +
@@ -38,7 +38,7 @@ class PostgresUserCrudService(
     return updatedRows > 0
   }
 
-  fun read(subject: String): GetUser {
+  override fun read(subject: String): GetUser {
     val preparedStatement = db.prepareStatement("SELECT * FROM $TABLE WHERE $SUBJECT = ?")
     preparedStatement.setString(1, subject)
     val result = preparedStatement.executeQuery()
@@ -51,7 +51,7 @@ class PostgresUserCrudService(
     return users.first()
   }
 
-  fun update(type: UserUpdateType, value: String, subject: String): Int {
+  override fun update(type: UserUpdateType, value: String, subject: String): Int {
     val preparedStatement = db.prepareStatement(
       "UPDATE $TABLE SET ${type.toSql} = ? WHERE $SUBJECT = ?"
     )
@@ -61,7 +61,7 @@ class PostgresUserCrudService(
     return preparedStatement.executeUpdate()
   }
 
-  fun delete(subject: String): Int {
+  override fun delete(subject: String): Int {
     val preparedStatement = db.prepareStatement(
       "DELETE FROM $TABLE WHERE $SUBJECT = ?"
     )

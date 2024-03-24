@@ -1,7 +1,6 @@
 package com.kenkoro.taurus.api.client.unit.auth
 
 import com.kenkoro.taurus.api.client.annotation.Unit
-import com.kenkoro.taurus.api.client.util.BadRequest
 import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
 import com.kenkoro.taurus.api.client.util.TestService.thenHttpStatusCodeShouldMatch
