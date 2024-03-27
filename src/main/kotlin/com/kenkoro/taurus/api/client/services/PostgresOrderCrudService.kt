@@ -1,12 +1,12 @@
 package com.kenkoro.taurus.api.client.services
 
-import com.kenkoro.taurus.api.client.models.request.order.Order
 import com.kenkoro.taurus.api.client.core.mappers.fromResult
 import com.kenkoro.taurus.api.client.core.mappers.setValues
+import com.kenkoro.taurus.api.client.models.request.order.Order
 import com.kenkoro.taurus.api.client.services.util.OrderUpdateType
 import java.sql.Connection
 
-class PostgresOrderUserCrudService(
+class PostgresOrderCrudService(
   private val db: Connection
 ) {
   companion object {
@@ -66,9 +66,12 @@ class PostgresOrderUserCrudService(
   }
 
   fun update(type: OrderUpdateType, value: String, orderId: Int): Int {
-    val preparedStatement = db.prepareStatement(
+    val sql = if (type == OrderUpdateType.Status) {
+      "UPDATE $TABLE SET ${type.toSql} = CAST(? AS order_status) WHERE $ORDER_ID = ?"
+    } else {
       "UPDATE $TABLE SET ${type.toSql} = ? WHERE $ORDER_ID = ?"
-    )
+    }
+    val preparedStatement = db.prepareStatement(sql)
     preparedStatement.setString(1, value)
     preparedStatement.setInt(2, orderId)
 

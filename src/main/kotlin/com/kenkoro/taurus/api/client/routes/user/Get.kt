@@ -15,7 +15,6 @@ fun Route.getUser(
   authenticate(config.authName) {
     get("/user/{subject?}") {
       val subject = call.parameters["subject"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-      call.attributes
 
       val fetchedUser = controller
         .subject(subject)

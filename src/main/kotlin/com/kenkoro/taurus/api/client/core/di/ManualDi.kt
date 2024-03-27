@@ -6,8 +6,8 @@ import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.controllers.UserControllerImpl
 import com.kenkoro.taurus.api.client.services.DbService
 import com.kenkoro.taurus.api.client.services.FakeUserCrudService
-import com.kenkoro.taurus.api.client.services.PostgresOrderUserCrudService
-import com.kenkoro.taurus.api.client.services.PostgresUserUserCrudService
+import com.kenkoro.taurus.api.client.services.PostgresOrderCrudService
+import com.kenkoro.taurus.api.client.services.PostgresUserCrudService
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -20,16 +20,16 @@ object ManualDi {
 
   fun providePostgresUserController(): UserController {
     val dbConnection = provideDbConnection()
-    val postgresUserCrudService = PostgresUserUserCrudService(dbConnection)
+    val postgresUserCrudService = PostgresUserCrudService(dbConnection)
 
     return UserControllerImpl(postgresUserCrudService)
   }
 
   fun providePostgresOrderController(): OrderController {
     val dbConnection = provideDbConnection()
-    val postgresOrderUserCrudService = PostgresOrderUserCrudService(dbConnection)
+    val postgresOrderCrudService = PostgresOrderCrudService(dbConnection)
 
-    return OrderControllerImpl(postgresOrderUserCrudService)
+    return OrderControllerImpl(postgresOrderCrudService)
   }
 
   fun provideUserControllerWithFakeUserCrudService(): UserController {

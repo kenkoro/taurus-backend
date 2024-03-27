@@ -3,11 +3,11 @@ package com.kenkoro.taurus.api.client.controllers
 import com.kenkoro.taurus.api.client.controllers.OrderController.Companion.changedRows
 import com.kenkoro.taurus.api.client.controllers.OrderController.Companion.preparedOrderId
 import com.kenkoro.taurus.api.client.models.request.order.Order
-import com.kenkoro.taurus.api.client.services.PostgresOrderUserCrudService
+import com.kenkoro.taurus.api.client.services.PostgresOrderCrudService
 import com.kenkoro.taurus.api.client.services.util.OrderUpdateType
 
 class OrderControllerImpl(
-  private val service: PostgresOrderUserCrudService
+  private val service: PostgresOrderCrudService
 ) : OrderController {
   override suspend fun create(model: Order): Boolean {
     return service.create(model)

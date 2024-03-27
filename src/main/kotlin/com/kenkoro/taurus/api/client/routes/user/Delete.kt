@@ -2,10 +2,12 @@ package com.kenkoro.taurus.api.client.routes.user
 
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
+import com.kenkoro.taurus.api.client.models.request.user.DeleteUser
 import com.kenkoro.taurus.api.client.models.util.UserProfile
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -15,19 +17,19 @@ fun Route.deleteUser(
 ) {
   authenticate(config.authName) {
     delete("/delete/user/{subject?}") {
+      val deleter = call.receiveNullable<DeleteUser>()?.deleter ?: run {
+        call.respond(HttpStatusCode.BadRequest)
+        return@delete
+      }
       val subject = call.parameters["subject"] ?: run {
-        return@delete call.respond(HttpStatusCode.BadRequest)
+        call.respond(HttpStatusCode.BadRequest)
+        return@delete
       }
 
-      /*
-       * WARN: Incorrect checking
-       * - You need to know who is requesting the deletion of some user,
-       * not who to delete
-       */
-      val profile = controller
-        .subject(subject)
+      val deleterProfile = controller
+        .subject(deleter)
         .read().profile
-      if (profile != UserProfile.Admin) {
+      if (deleterProfile != UserProfile.Admin) {
         call.respond(HttpStatusCode.Conflict, "Only admin users can delete other users")
         return@delete
       }
@@ -41,7 +43,10 @@ fun Route.deleteUser(
         return@delete
       }
 
-      call.respond(HttpStatusCode.OK, "Successfully deleted the user")
+      call.respond(
+        status = HttpStatusCode.OK,
+        message = "Successfully deleted the user"
+      )
     }
   }
 }

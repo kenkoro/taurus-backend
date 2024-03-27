@@ -1,15 +1,15 @@
 package com.kenkoro.taurus.api.client.services
 
 import com.kenkoro.taurus.api.client.core.annotations.Warning
-import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
-import com.kenkoro.taurus.api.client.models.request.user.GetUser
 import com.kenkoro.taurus.api.client.core.mappers.fromResult
 import com.kenkoro.taurus.api.client.core.mappers.setValues
+import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
+import com.kenkoro.taurus.api.client.models.request.user.GetUser
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 import java.sql.Connection
 
 @Warning("Rewrite sql queries from plain text to functions from Exposed Framework")
-class PostgresUserUserCrudService(
+class PostgresUserCrudService(
   private val db: Connection
 ) : UserCrudService {
   companion object {
@@ -52,9 +52,12 @@ class PostgresUserUserCrudService(
   }
 
   override fun update(type: UserUpdateType, value: String, subject: String): Int {
-    val preparedStatement = db.prepareStatement(
+    val sql = if (type == UserUpdateType.Profile) {
+      "UPDATE $TABLE SET ${type.toSql} = CAST(? AS user_role) WHERE $SUBJECT = ?"
+    } else {
       "UPDATE $TABLE SET ${type.toSql} = ? WHERE $SUBJECT = ?"
-    )
+    }
+    val preparedStatement = db.prepareStatement(sql)
     preparedStatement.setString(1, value)
     preparedStatement.setString(2, subject)
 
