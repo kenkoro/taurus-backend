@@ -18,8 +18,8 @@ fun Route.updateOrderData(
   config: TokenConfig
 ) {
   authenticate(config.authName) {
-    put("/order/{orderId?}/edit/{data?}") {
-      val orderId = call.parameters["orderId"]?.toIntOrNull() ?: run {
+    put("/order/{order_id?}/edit/{data?}") {
+      val orderId = call.parameters["order_id"]?.toIntOrNull() ?: run {
         call.respond(HttpStatusCode.BadRequest, "The order id is null")
         return@put
       }

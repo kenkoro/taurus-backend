@@ -13,8 +13,8 @@ fun Route.getOrder(
   config: TokenConfig
 ) {
   authenticate(config.authName) {
-    get("/order/{orderId?}") {
-      val orderId = call.parameters["orderId"]?.toIntOrNull() ?: run {
+    get("/order/{order_id?}") {
+      val orderId = call.parameters["order_id"]?.toIntOrNull() ?: run {
         call.respond(HttpStatusCode.BadRequest, "The order id is null")
         return@get
       }

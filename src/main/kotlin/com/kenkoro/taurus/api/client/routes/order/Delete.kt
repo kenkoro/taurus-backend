@@ -18,12 +18,12 @@ fun Route.deleteOrder(
   config: TokenConfig
 ) {
   authenticate(config.authName) {
-    delete("/delete/order/{orderId?}") {
+    delete("/delete/order/{order_id?}") {
       val deleter = call.receiveNullable<DeleteOrder>()?.deleter ?: run {
         call.respond(HttpStatusCode.BadRequest)
         return@delete
       }
-      val orderId = call.parameters["orderId"]?.toIntOrNull() ?: run {
+      val orderId = call.parameters["order_id"]?.toIntOrNull() ?: run {
         call.respond(HttpStatusCode.BadRequest, "The order id is null")
         return@delete
       }
