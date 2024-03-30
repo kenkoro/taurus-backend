@@ -20,7 +20,7 @@ fun Route.getOrders(
       val offset = (page - 1) * perPage
       val paginatedOrders = controller.readAll(offset, perPage)
 
-      val hasNextPage = paginatedOrders.size > perPage
+      val hasNextPage = paginatedOrders.size >= perPage
 
       call.respond(
         status = HttpStatusCode.OK,
