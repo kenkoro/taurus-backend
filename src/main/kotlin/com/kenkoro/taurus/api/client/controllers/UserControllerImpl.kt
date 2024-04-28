@@ -4,7 +4,7 @@ import com.kenkoro.taurus.api.client.controllers.UserController.Companion.change
 import com.kenkoro.taurus.api.client.controllers.UserController.Companion.preparedSubject
 import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
 import com.kenkoro.taurus.api.client.models.request.user.GetUser
-import com.kenkoro.taurus.api.client.services.UserCrudService
+import com.kenkoro.taurus.api.client.services.crud.user.UserCrudService
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 
 class UserControllerImpl(

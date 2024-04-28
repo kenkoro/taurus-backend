@@ -2,7 +2,6 @@ val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
 val postgresVersion: String by project
-val h2Version: String by project
 val commonsCodec: String by project
 
 plugins {
@@ -32,9 +31,9 @@ dependencies {
   implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
   implementation("io.ktor:ktor-server-netty-jvm")
 
-  implementation("org.postgresql:postgresql:$postgresVersion")
   implementation("ch.qos.logback:logback-classic:$logbackVersion")
   implementation("commons-codec:commons-codec:$commonsCodec")
+  implementation("org.postgresql:postgresql:$postgresVersion")
 
   testImplementation("io.ktor:ktor-server-tests-jvm")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")

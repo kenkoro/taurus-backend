@@ -1,4 +1,4 @@
-package com.kenkoro.taurus.api.client.services
+package com.kenkoro.taurus.api.client.services.crud.user
 
 import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
 import com.kenkoro.taurus.api.client.models.request.user.GetUser

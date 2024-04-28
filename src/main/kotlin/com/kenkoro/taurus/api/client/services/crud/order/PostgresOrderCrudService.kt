@@ -1,4 +1,4 @@
-package com.kenkoro.taurus.api.client.services
+package com.kenkoro.taurus.api.client.services.crud.order
 
 import com.kenkoro.taurus.api.client.core.mappers.fromResult
 import com.kenkoro.taurus.api.client.core.mappers.setValues
@@ -51,7 +51,7 @@ class PostgresOrderCrudService(
 
   fun readAll(offset: Int, perPage: Int): List<Order> {
     val preparedStatement = db.prepareStatement(
-      "SELECT * FROM $TABLE LIMIT ? OFFSET ?"
+      "SELECT * FROM $TABLE ORDER BY $ORDER_ID LIMIT ? OFFSET ?"
     )
     preparedStatement.setInt(1, perPage)
     preparedStatement.setInt(2, offset)

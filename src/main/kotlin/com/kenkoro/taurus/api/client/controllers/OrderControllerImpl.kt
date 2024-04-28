@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.controllers
 import com.kenkoro.taurus.api.client.controllers.OrderController.Companion.changedRows
 import com.kenkoro.taurus.api.client.controllers.OrderController.Companion.preparedOrderId
 import com.kenkoro.taurus.api.client.models.request.order.Order
-import com.kenkoro.taurus.api.client.services.PostgresOrderCrudService
+import com.kenkoro.taurus.api.client.services.crud.order.PostgresOrderCrudService
 import com.kenkoro.taurus.api.client.services.util.OrderUpdateType
 
 class OrderControllerImpl(
