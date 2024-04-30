@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.models.request.user
 
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

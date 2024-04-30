@@ -5,7 +5,7 @@ import kotlin.properties.Delegates
 object SutService {
   private var isUnderTest by Delegates.notNull<Boolean>()
 
-  fun turnOn(isUnderTest: Boolean) {
+  fun init(isUnderTest: Boolean) {
     SutService.isUnderTest = isUnderTest
   }
 

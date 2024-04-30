@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.util
 import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
 import com.kenkoro.taurus.api.client.models.request.user.CreateUser
 import com.kenkoro.taurus.api.client.models.response.login.LoginResponse
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 import io.ktor.client.*
 import io.ktor.client.call.*

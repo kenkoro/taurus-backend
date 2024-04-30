@@ -19,6 +19,7 @@ fun Route.getOrder(
         return@get
       }
 
+      /*
       val fetchedOrder = controller
         .orderId(orderId)
         .read()
@@ -27,6 +28,7 @@ fun Route.getOrder(
         status = HttpStatusCode.OK,
         message = fetchedOrder
       )
+       */
     }
   }
 }

@@ -1,6 +1,6 @@
 package com.kenkoro.taurus.api.client.models.request.order
 
-import com.kenkoro.taurus.api.client.models.util.OrderStatus
+import com.kenkoro.taurus.api.client.models.enums.OrderStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

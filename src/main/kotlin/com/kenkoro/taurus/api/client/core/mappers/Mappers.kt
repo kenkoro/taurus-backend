@@ -5,8 +5,8 @@ import com.kenkoro.taurus.api.client.models.request.order.Order
 import com.kenkoro.taurus.api.client.models.request.user.CreateUser
 import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
 import com.kenkoro.taurus.api.client.models.request.user.GetUser
-import com.kenkoro.taurus.api.client.models.util.OrderStatus
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.OrderStatus
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.services.crud.order.PostgresOrderCrudService.Companion.CATEGORY
 import com.kenkoro.taurus.api.client.services.crud.order.PostgresOrderCrudService.Companion.COLOR
 import com.kenkoro.taurus.api.client.services.crud.order.PostgresOrderCrudService.Companion.CUSTOMER

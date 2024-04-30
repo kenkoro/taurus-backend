@@ -2,8 +2,8 @@ package com.kenkoro.taurus.api.client.routes.user
 
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.request.user.DeleteUser
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.request.shared.DeleteRequest
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,7 +17,7 @@ fun Route.deleteUser(
 ) {
   authenticate(config.authName) {
     delete("/delete/user/{subject?}") {
-      val deleter = call.receiveNullable<DeleteUser>()?.deleter ?: run {
+      val deleter = call.receiveNullable<DeleteRequest>()?.deleter ?: run {
         call.respond(HttpStatusCode.BadRequest)
         return@delete
       }

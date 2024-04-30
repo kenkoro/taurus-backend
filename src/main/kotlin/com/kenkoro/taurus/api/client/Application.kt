@@ -20,6 +20,7 @@ private fun Application.configure() {
   )
   JwtTokenConfigService.setUp(config)
 
+  configureExposed()
   configureSecurity()
   configureMonitoring()
   configureSerialization()
@@ -27,11 +28,11 @@ private fun Application.configure() {
 }
 
 fun Application.module() {
-  SutService.turnOn(isUnderTest = false)
+  SutService.init(isUnderTest = false)
   configure()
 }
 
 fun Application.testModule() {
-  SutService.turnOn(isUnderTest = true)
+  SutService.init(isUnderTest = true)
   configure()
 }

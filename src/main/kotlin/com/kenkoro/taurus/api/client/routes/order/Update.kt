@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.routes.order
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.routes.util.RouteService
 import com.kenkoro.taurus.api.client.services.util.OrderUpdateType
 import io.ktor.http.*
@@ -36,6 +36,7 @@ fun Route.updateOrderData(
         return@put
       }
 
+      /*
       val wasAcknowledged = if (isCustomer(updaterProfile)) {
         orderController
           .orderId(orderId)
@@ -53,6 +54,7 @@ fun Route.updateOrderData(
       }
 
       call.respond(HttpStatusCode.OK, "Successfully updated the order's data")
+       */
     }
   }
 }

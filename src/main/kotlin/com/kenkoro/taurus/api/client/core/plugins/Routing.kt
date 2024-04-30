@@ -1,5 +1,7 @@
 package com.kenkoro.taurus.api.client.core.plugins
 
+import com.kenkoro.taurus.api.client.controllers.OrderController
+import com.kenkoro.taurus.api.client.controllers.OrderControllerImpl
 import com.kenkoro.taurus.api.client.core.di.ManualDi.providePostgresOrderController
 import com.kenkoro.taurus.api.client.core.di.ManualDi.providePostgresUserController
 import com.kenkoro.taurus.api.client.core.di.ManualDi.provideUserControllerWithFakeUserCrudService
@@ -13,12 +15,9 @@ fun Application.configureRouting() {
   } else {
     provideUserControllerWithFakeUserCrudService()
   }
-  val orderController = providePostgresOrderController()
+  val orderController = OrderControllerImpl()
 
   configureAuthRouting(userController)
   configureUserRouting(userController)
-  configureOrderRouting(
-    userController = userController,
-    orderController = orderController
-  )
+  configureOrderRouting(orderController)
 }

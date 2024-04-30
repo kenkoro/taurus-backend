@@ -1,7 +1,7 @@
 package com.kenkoro.taurus.api.client.integration.user
 
 import com.kenkoro.taurus.api.client.annotation.Integration
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.util.TestService.User.createANewTestUserThenLoginAndGetSubjectAndToken
 import com.kenkoro.taurus.api.client.util.TestService.User.token
 import io.ktor.http.*

@@ -1,8 +1,9 @@
-val ktorVersion: String by project
-val kotlinVersion: String by project
-val logbackVersion: String by project
-val postgresVersion: String by project
+val ktor: String by project
+val kotlin: String by project
+val logback: String by project
+val postgres: String by project
 val commonsCodec: String by project
+val exposed: String by project
 
 plugins {
   kotlin("jvm") version "1.9.22"
@@ -31,10 +32,14 @@ dependencies {
   implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
   implementation("io.ktor:ktor-server-netty-jvm")
 
-  implementation("ch.qos.logback:logback-classic:$logbackVersion")
+  implementation("ch.qos.logback:logback-classic:$logback")
   implementation("commons-codec:commons-codec:$commonsCodec")
-  implementation("org.postgresql:postgresql:$postgresVersion")
+  implementation("org.postgresql:postgresql:$postgres")
+  implementation("org.jetbrains.exposed:exposed-core:$exposed")
+  implementation("org.jetbrains.exposed:exposed-dao:$exposed")
+  implementation("org.jetbrains.exposed:exposed-jdbc:$exposed")
+  implementation("org.jetbrains.exposed:exposed-java-time:$exposed")
 
   testImplementation("io.ktor:ktor-server-tests-jvm")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+  testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin")
 }

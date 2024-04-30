@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.routes.user
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.hashing.HashingService
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.routes.util.RouteService
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 import io.ktor.http.*

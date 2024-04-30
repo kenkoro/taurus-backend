@@ -15,7 +15,7 @@ object ManualDi {
   private fun provideDbConnection(): Connection {
     Class.forName("org.postgresql.Driver")
     val (url, user, password) = DbService.credentials()
-    return DriverManager.getConnection(url, user, password)
+    return DriverManager.getConnection(url.value, user.value, password.value)
   }
 
   fun providePostgresUserController(): UserController {
@@ -26,10 +26,7 @@ object ManualDi {
   }
 
   fun providePostgresOrderController(): OrderController {
-    val dbConnection = provideDbConnection()
-    val postgresOrderCrudService = PostgresOrderCrudService(dbConnection)
-
-    return OrderControllerImpl(postgresOrderCrudService)
+    return OrderControllerImpl()
   }
 
   fun provideUserControllerWithFakeUserCrudService(): UserController {

@@ -2,7 +2,7 @@ package com.kenkoro.taurus.api.client.controllers
 
 import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
 import com.kenkoro.taurus.api.client.models.request.user.GetUser
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.services.util.UserUpdateType
 
 interface UserController {

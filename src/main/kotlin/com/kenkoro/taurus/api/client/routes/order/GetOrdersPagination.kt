@@ -18,6 +18,7 @@ fun Route.getOrders(
       val page = call.parameters["page"]?.toIntOrNull() ?: 1
       val perPage = call.parameters["per_page"]?.toIntOrNull() ?: 10
       val offset = (page - 1) * perPage
+      /*
       val paginatedOrders = controller.readAll(offset, perPage)
 
       val hasNextPage = paginatedOrders.size >= perPage
@@ -29,6 +30,7 @@ fun Route.getOrders(
           hasNextPage = hasNextPage
         )
       )
+       */
     }
   }
 }

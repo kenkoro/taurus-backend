@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.integration.auth
 import com.kenkoro.taurus.api.client.annotation.Integration
 import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
 import com.kenkoro.taurus.api.client.models.request.user.CreateUser
-import com.kenkoro.taurus.api.client.models.util.UserProfile
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.util.TestService.User.givenUser
 import com.kenkoro.taurus.api.client.util.TestService.User.whenUserSignsIn
 import com.kenkoro.taurus.api.client.util.TestService.applicationConfigAndClientPlugins
