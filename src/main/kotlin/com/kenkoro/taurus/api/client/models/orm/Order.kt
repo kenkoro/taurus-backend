@@ -17,6 +17,7 @@ data class Order(
   val category: String,
   val quantity: Int,
   val status: OrderStatus,
+  @SerialName("creator_id") val creatorId: Int,
 )
 
 @Serializable
@@ -30,10 +31,11 @@ data class NewOrder(
   val category: String,
   val quantity: Int,
   val status: OrderStatus,
+  @SerialName("creator_id") val creatorId: Int,
 )
 
 object Orders : Table() {
-  val recordId = integer("record_id").autoIncrement()
+  val recordId = integer("record_id").autoIncrement().uniqueIndex()
   val orderId = integer("order_id")
   val customer = varchar("customer", 128)
   val date = long("date")
@@ -48,6 +50,7 @@ object Orders : Table() {
       "status",
       "order_status",
       fromDb = { value -> OrderStatus.valueOf(value as String) },
-      toDb = { PGEnum("order_status", it) }
+      toDb = { PGEnum("order_status", it) },
     )
+  val creatorId = reference("creator_id", Users.userId)
 }
