@@ -9,8 +9,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 fun Route.addNewOrder(
   controller: OrderController,
@@ -28,7 +26,8 @@ fun Route.addNewOrder(
     }
 
     val addedOrder = controller.addNewOrder(
-      request.orderId, OrderFields(
+      request.orderId,
+      OrderFields(
         customer = request.customer,
         title = request.title,
         model = request.model,
@@ -36,6 +35,7 @@ fun Route.addNewOrder(
         color = request.color,
         category = request.category,
         quantity = request.quantity,
+        status = request.status,
       )
     )
 

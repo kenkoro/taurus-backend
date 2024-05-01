@@ -2,9 +2,17 @@ package com.kenkoro.taurus.api.client.services.dao
 
 import com.kenkoro.taurus.api.client.models.orm.Order
 import com.kenkoro.taurus.api.client.models.orm.Orders
+import com.kenkoro.taurus.api.client.models.orm.Orders.category
+import com.kenkoro.taurus.api.client.models.orm.Orders.color
+import com.kenkoro.taurus.api.client.models.orm.Orders.model
+import com.kenkoro.taurus.api.client.models.orm.Orders.quantity
+import com.kenkoro.taurus.api.client.models.orm.Orders.size
+import com.kenkoro.taurus.api.client.models.orm.Orders.status
+import com.kenkoro.taurus.api.client.models.orm.Orders.title
 import com.kenkoro.taurus.api.client.services.DbService.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
 
 class OrderDaoFacadeImpl : OrderDaoFacade {
   private fun resultRowToOrder(row: ResultRow) = Order(
@@ -18,7 +26,18 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
     color = row[Orders.color],
     category = row[Orders.category],
     quantity = row[Orders.quantity],
+    status = row[Orders.status],
   )
+
+  private fun setFields(builder: UpdateBuilder<*>, fields: OrderFields) {
+    builder[title] = fields.title
+    builder[model] = fields.model
+    builder[size] = fields.size
+    builder[color] = fields.color
+    builder[category] = fields.category
+    builder[quantity] = fields.quantity
+    builder[status] = fields.status
+  }
 
   override suspend fun order(id: Int): Order? = dbQuery {
     Orders
@@ -33,12 +52,7 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
       it[orderId] = id
       it[customer] = fields.customer
       it[date] = System.currentTimeMillis()
-      it[title] = fields.title
-      it[model] = fields.model
-      it[size] = fields.size
-      it[color] = fields.color
-      it[category] = fields.category
-      it[quantity] = fields.quantity
+      setFields(it, fields)
     }
     insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToOrder)
   }
@@ -57,13 +71,7 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
 
   override suspend fun editOrder(id: Int, fields: OrderFields): Boolean = dbQuery {
     Orders.update({ Orders.orderId eq id }) {
-      it[customer] = fields.customer
-      it[title] = fields.title
-      it[model] = fields.model
-      it[size] = fields.size
-      it[color] = fields.color
-      it[category] = fields.category
-      it[quantity] = fields.quantity
+      setFields(it, fields)
     } > 0
   }
 }

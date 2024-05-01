@@ -1,6 +1,7 @@
 package com.kenkoro.taurus.api.client.services.dao
 
 import com.kenkoro.taurus.api.client.models.orm.Order
+import com.kenkoro.taurus.api.client.models.orm.OrderStatus
 
 data class OrderFields(
   val customer: String,
@@ -10,6 +11,7 @@ data class OrderFields(
   val color: String,
   val category: String,
   val quantity: Int,
+  val status: OrderStatus,
 )
 
 interface OrderDaoFacade {

@@ -16,6 +16,7 @@ data class Order(
   val color: String,
   val category: String,
   val quantity: Int,
+  val status: OrderStatus,
 )
 
 @Serializable
@@ -28,6 +29,7 @@ data class NewOrder(
   val color: String,
   val category: String,
   val quantity: Int,
+  val status: OrderStatus,
 )
 
 object Orders : Table() {
@@ -41,4 +43,11 @@ object Orders : Table() {
   val color = varchar("color", 32)
   val category = varchar("category", 32)
   val quantity = integer("quantity")
+  val status =
+    customEnumeration(
+      "status",
+      "order_status",
+      fromDb = { value -> OrderStatus.valueOf(value as String) },
+      toDb = { PGEnum("order_status", it) }
+    )
 }

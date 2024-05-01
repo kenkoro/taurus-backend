@@ -36,6 +36,7 @@ object DbService {
   fun init() {
     val db = DbSettings.db
     transaction(db) {
+      // Firstly, you need to init enums by using the init_dependencies.sh script
       SchemaUtils.create(
         Orders,
         // Other tables to init
