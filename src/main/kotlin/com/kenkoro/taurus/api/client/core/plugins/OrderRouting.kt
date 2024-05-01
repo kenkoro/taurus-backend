@@ -7,10 +7,17 @@ import com.kenkoro.taurus.api.client.routes.order.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
-fun Application.configureOrderRouting(orderController: OrderController) {
+fun Application.configureOrderRouting(
+  userController: UserController,
+  orderController: OrderController,
+) {
   val config = JwtTokenConfigService.config()
 
   routing {
     addNewOrder(orderController, config)
+    deleteOrder(userController, orderController, config)
+    getOrder(orderController, config)
+    getOrders(orderController, config)
+    editOrder(userController, orderController, config)
   }
 }

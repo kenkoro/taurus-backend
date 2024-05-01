@@ -2,10 +2,11 @@ package com.kenkoro.taurus.api.client.models.enums
 
 enum class UserProfile {
   Admin,
-  Manager,
+  Ceo,
   Customer,
+  Manager,
   Cutter,
   Inspector,
   Tailor,
-  Others
+  Other,
 }

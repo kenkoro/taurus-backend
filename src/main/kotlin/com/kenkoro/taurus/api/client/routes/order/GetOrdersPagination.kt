@@ -2,7 +2,7 @@ package com.kenkoro.taurus.api.client.routes.order
 
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.response.order.GetOrders
+import com.kenkoro.taurus.api.client.models.util.PaginatedOrders
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -18,19 +18,14 @@ fun Route.getOrders(
       val page = call.parameters["page"]?.toIntOrNull() ?: 1
       val perPage = call.parameters["per_page"]?.toIntOrNull() ?: 10
       val offset = (page - 1) * perPage
-      /*
-      val paginatedOrders = controller.readAll(offset, perPage)
+      val paginatedOrders = controller.paginatedOrders(offset.toLong(), perPage)
 
       val hasNextPage = paginatedOrders.size >= perPage
 
       call.respond(
         status = HttpStatusCode.OK,
-        message = GetOrders(
-          paginatedOrders = paginatedOrders,
-          hasNextPage = hasNextPage
-        )
+        message = PaginatedOrders(paginatedOrders, hasNextPage)
       )
-       */
     }
   }
 }

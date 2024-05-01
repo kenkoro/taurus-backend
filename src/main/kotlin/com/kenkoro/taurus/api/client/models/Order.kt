@@ -1,5 +1,7 @@
-package com.kenkoro.taurus.api.client.models.orm
+package com.kenkoro.taurus.api.client.models
 
+import com.kenkoro.taurus.api.client.models.enums.OrderStatus
+import com.kenkoro.taurus.api.client.models.util.PGEnum
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table

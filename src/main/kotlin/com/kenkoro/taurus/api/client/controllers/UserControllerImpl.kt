@@ -1,34 +1,25 @@
 package com.kenkoro.taurus.api.client.controllers
 
-import com.kenkoro.taurus.api.client.controllers.UserController.Companion.changedRows
-import com.kenkoro.taurus.api.client.controllers.UserController.Companion.preparedSubject
-import com.kenkoro.taurus.api.client.models.request.user.CreateUserWithSalt
-import com.kenkoro.taurus.api.client.models.request.user.GetUser
-import com.kenkoro.taurus.api.client.services.crud.user.UserCrudService
-import com.kenkoro.taurus.api.client.services.util.UserUpdateType
+import com.kenkoro.taurus.api.client.models.NewUser
+import com.kenkoro.taurus.api.client.models.SaltWrapper
+import com.kenkoro.taurus.api.client.models.User
+import com.kenkoro.taurus.api.client.services.dao.UserDaoFacade
+import com.kenkoro.taurus.api.client.services.dao.UserDaoFacadeImpl
 
 class UserControllerImpl(
-  private val service: UserCrudService
+  private val dao: UserDaoFacade = UserDaoFacadeImpl(),
 ) : UserController {
-  override suspend fun create(model: CreateUserWithSalt): Boolean {
-    return service.create(model)
-  }
+  override suspend fun user(id: Int): User? = dao.user(id)
 
-  override suspend fun read(subject: String): GetUser {
-    return service.read(subject)
-  }
+  override suspend fun user(subject: String): User? = dao.user(subject)
 
-  override suspend fun update(type: UserUpdateType, value: String): UserController {
-    changedRows = service.update(
-      type = type,
-      value = value,
-      subject = preparedSubject
-    )
-    return this
-  }
+  override suspend fun addNewUser(user: NewUser, saltWrapper: SaltWrapper): User? = dao.addNewUser(user, saltWrapper)
 
-  override suspend fun delete(): UserController {
-    changedRows = service.delete(preparedSubject)
-    return this
-  }
+  override suspend fun deleteUser(id: Int): Boolean = dao.deleteUser(id)
+
+  override suspend fun deleteUser(subject: String): Boolean = dao.deleteUser(subject)
+
+  override suspend fun allUsers(): List<User> = dao.allUsers()
+
+  override suspend fun editUser(subject: String, user: NewUser): Boolean = dao.editUser(subject, user)
 }

@@ -1,8 +1,7 @@
 package com.kenkoro.taurus.api.client.controllers
 
-import com.kenkoro.taurus.api.client.models.orm.NewOrder
-import com.kenkoro.taurus.api.client.models.orm.Order
-import com.kenkoro.taurus.api.client.services.dao.OrderFields
+import com.kenkoro.taurus.api.client.models.NewOrder
+import com.kenkoro.taurus.api.client.models.Order
 
 interface OrderController {
   suspend fun order(id: Int): Order?
@@ -10,8 +9,5 @@ interface OrderController {
   suspend fun deleteOrder(id: Int): Boolean
   suspend fun allOrders(): List<Order>
   suspend fun paginatedOrders(offset: Long, perPage: Int): List<Order>
-  suspend fun editOrder(
-    id: Int,
-    fields: NewOrder,
-  ): Boolean
+  suspend fun editOrder(orderId: Int, order: NewOrder): Boolean
 }

@@ -14,11 +14,16 @@ fun Route.getUser(
 ) {
   authenticate(config.authName) {
     get("/user/{subject?}") {
-      val subject = call.parameters["subject"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+      val subject = call.parameters["subject"] ?: run {
+        call.respond(HttpStatusCode.BadRequest, "The user subject is null")
+        return@get
+      }
 
-      val fetchedUser = controller
-        .subject(subject)
-        .read()
+      val fetchedUser = controller.user(subject)
+      if (fetchedUser == null) {
+        call.respond(HttpStatusCode.BadRequest, "User is not found")
+        return@get
+      }
 
       call.respond(
         status = HttpStatusCode.OK,

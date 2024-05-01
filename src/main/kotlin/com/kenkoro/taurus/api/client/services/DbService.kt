@@ -1,7 +1,8 @@
 package com.kenkoro.taurus.api.client.services
 
 import com.kenkoro.taurus.api.client.core.exceptions.EnvException
-import com.kenkoro.taurus.api.client.models.orm.Orders
+import com.kenkoro.taurus.api.client.models.Orders
+import com.kenkoro.taurus.api.client.models.Users
 import com.kenkoro.taurus.api.client.services.DbService.credentials
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -39,7 +40,7 @@ object DbService {
       // Firstly, you need to init enums by using the init_dependencies.sh script
       SchemaUtils.create(
         Orders,
-        // Other tables to init
+        Users,
       )
     }
   }

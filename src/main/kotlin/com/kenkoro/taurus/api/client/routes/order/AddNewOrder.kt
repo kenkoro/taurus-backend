@@ -2,7 +2,8 @@ package com.kenkoro.taurus.api.client.routes.order
 
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.orm.NewOrder
+import com.kenkoro.taurus.api.client.models.NewOrder
+import com.kenkoro.taurus.api.client.routes.util.Validator
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -21,13 +22,12 @@ fun Route.addNewOrder(
         return@post
       }
 
-      if (!isNewOrderValid(newOrder)) {
+      if (!Validator.isNewOrderValid(newOrder)) {
         call.respond(HttpStatusCode.Conflict, "Request has blank data")
         return@post
       }
 
       val addedOrder = controller.addNewOrder(newOrder)
-
       if (addedOrder == null) {
         call.respond(HttpStatusCode.InternalServerError, "Failed to push the new order")
         return@post
@@ -39,15 +39,4 @@ fun Route.addNewOrder(
       )
     }
   }
-}
-
-private fun isNewOrderValid(order: NewOrder): Boolean {
-  return order.orderId > 0
-      && order.customer.isNotBlank()
-      && order.title.isNotBlank()
-      && order.model.isNotBlank()
-      && order.size.isNotBlank()
-      && order.color.isNotBlank()
-      && order.category.isNotBlank()
-      && order.quantity > 0
 }

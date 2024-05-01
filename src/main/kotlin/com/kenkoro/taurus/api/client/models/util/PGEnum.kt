@@ -1,4 +1,4 @@
-package com.kenkoro.taurus.api.client.models.orm
+package com.kenkoro.taurus.api.client.models.util
 
 import org.postgresql.util.PGobject
 

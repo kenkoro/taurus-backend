@@ -1,5 +1,7 @@
-package com.kenkoro.taurus.api.client.models.orm
+package com.kenkoro.taurus.api.client.models
 
+import com.kenkoro.taurus.api.client.models.enums.UserProfile
+import com.kenkoro.taurus.api.client.models.util.PGEnum
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -37,7 +39,7 @@ data class User(
   @SerialName("last_name") val lastName: String,
   val email: String,
   val profile: UserProfile,
-  val salt: SaltWrapper,
+  @SerialName("salt") val saltWrapper: SaltWrapper,
 )
 
 @Serializable
@@ -49,6 +51,16 @@ data class NewUser(
   @SerialName("last_name") val lastName: String,
   val email: String,
   val profile: UserProfile,
+)
+
+fun NewUser.setHashedPassword(password: String): NewUser = this.copy(
+  subject = subject,
+  password = password,
+  image = image,
+  firstName = firstName,
+  lastName = lastName,
+  email = email,
+  profile = profile
 )
 
 object Users : Table() {

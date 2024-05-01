@@ -1,7 +1,7 @@
 package com.kenkoro.taurus.api.client.services.dao
 
-import com.kenkoro.taurus.api.client.models.orm.NewOrder
-import com.kenkoro.taurus.api.client.models.orm.Order
+import com.kenkoro.taurus.api.client.models.NewOrder
+import com.kenkoro.taurus.api.client.models.Order
 
 interface OrderDaoFacade {
   suspend fun order(id: Int): Order?
@@ -9,5 +9,5 @@ interface OrderDaoFacade {
   suspend fun deleteOrder(id: Int): Boolean
   suspend fun allOrders(): List<Order>
   suspend fun paginatedOrders(offset: Long, perPage: Int): List<Order>
-  suspend fun editOrder(order: NewOrder): Boolean
+  suspend fun editOrder(orderId: Int, order: NewOrder): Boolean
 }

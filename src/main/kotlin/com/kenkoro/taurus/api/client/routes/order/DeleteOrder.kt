@@ -3,8 +3,9 @@ package com.kenkoro.taurus.api.client.routes.order
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.request.shared.DeleteRequest
-import com.kenkoro.taurus.api.client.models.enums.UserProfile
+import com.kenkoro.taurus.api.client.models.dto.DeleteDto
+import com.kenkoro.taurus.api.client.models.enums.UserProfile.Admin
+import com.kenkoro.taurus.api.client.models.enums.UserProfile.Customer
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -19,7 +20,7 @@ fun Route.deleteOrder(
 ) {
   authenticate(config.authName) {
     delete("/delete/order/{order_id?}") {
-      val deleter = call.receiveNullable<DeleteRequest>()?.deleter ?: run {
+      val deleterSubject = call.receiveNullable<DeleteDto>()?.deleterSubject ?: run {
         call.respond(HttpStatusCode.BadRequest)
         return@delete
       }
@@ -27,25 +28,20 @@ fun Route.deleteOrder(
         call.respond(HttpStatusCode.BadRequest, "The order id is null")
         return@delete
       }
-
-      val deleterProfile = userController
-        .subject(deleter)
-        .read().profile
-      if (deleterProfile != UserProfile.Customer) {
-        call.respond(HttpStatusCode.Conflict, "Only customers can delete the orders")
+      val deleterProfile = userController.user(deleterSubject)?.profile ?: run {
+        call.respond(HttpStatusCode.NotFound, "The user who's deleting this order is not found")
+        return@delete
+      }
+      if (deleterProfile != Customer && deleterProfile != Admin) {
+        call.respond(HttpStatusCode.Conflict, "Only customers and admins can delete orders")
         return@delete
       }
 
-      /*
-      val wasAcknowledged = orderController
-        .orderId(orderId)
-        .delete()
-        .wasAcknowledged()
+      val wasAcknowledged = orderController.deleteOrder(orderId)
       if (!wasAcknowledged) {
         call.respond(HttpStatusCode.InternalServerError, "Failed to delete the order")
         return@delete
       }
-       */
 
       call.respond(HttpStatusCode.OK, "Successfully deleted the order")
     }

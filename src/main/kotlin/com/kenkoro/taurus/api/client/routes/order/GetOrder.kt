@@ -19,16 +19,16 @@ fun Route.getOrder(
         return@get
       }
 
-      /*
-      val fetchedOrder = controller
-        .orderId(orderId)
-        .read()
+      val fetchedOrder = controller.order(orderId)
+      if (fetchedOrder == null) {
+        call.respond(HttpStatusCode.BadRequest, "Order is not found")
+        return@get
+      }
 
       call.respond(
         status = HttpStatusCode.OK,
         message = fetchedOrder
       )
-       */
     }
   }
 }

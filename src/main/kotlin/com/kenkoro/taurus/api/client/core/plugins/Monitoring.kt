@@ -8,6 +8,6 @@ import org.slf4j.event.Level
 fun Application.configureMonitoring() {
   install(CallLogging) {
     level = Level.DEBUG
-    filter { call -> call.request.path().startsWith("/orders") }
+    filter { call -> call.request.path().startsWith("/") }
   }
 }

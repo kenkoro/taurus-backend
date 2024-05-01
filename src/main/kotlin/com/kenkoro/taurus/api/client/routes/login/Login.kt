@@ -7,8 +7,7 @@ import com.kenkoro.taurus.api.client.core.security.token.JwtTokenService
 import com.kenkoro.taurus.api.client.core.security.token.TokenClaim
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
 import com.kenkoro.taurus.api.client.core.security.token.TokenService
-import com.kenkoro.taurus.api.client.models.request.login.LoginRequest
-import com.kenkoro.taurus.api.client.models.response.login.LoginResponse
+import com.kenkoro.taurus.api.client.models.dto.LoginDto
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -21,14 +20,22 @@ fun Route.login(
   config: TokenConfig
 ) {
   post("/login") {
-    val request = call.receiveNullable<LoginRequest>() ?: run {
+    val request = call.receiveNullable<LoginDto>() ?: run {
       call.respond(HttpStatusCode.BadRequest)
       return@post
     }
 
-    val fetchedUser = controller.subject(request.subject).read()
+    val user = controller.user(request.subject)
+    if (user == null) {
+      call.respond(HttpStatusCode.BadRequest, "User is not found")
+      return@post
+    }
 
-    if (!isHashedPasswordValid(request.password, SaltedHash(fetchedUser.password, fetchedUser.salt), hashingService)) {
+    val saltedHash = SaltedHash(
+      hashedPasswordWithSalt = user.password,
+      salt = user.saltWrapper.salt
+    )
+    if (!isHashedPasswordValid(request.password, saltedHash, hashingService)) {
       call.respond(HttpStatusCode.Conflict, "Password is not valid")
       return@post
     }
@@ -39,16 +46,14 @@ fun Route.login(
       claims = arrayOf(
         TokenClaim(
           name = "sub",
-          value = fetchedUser.id.toString()
+          value = user.userId.toString()
         )
       )
     )
 
     call.respond(
       status = HttpStatusCode.Accepted,
-      message = LoginResponse(
-        token = token
-      )
+      message = mapOf("token" to token)
     )
   }
 }
