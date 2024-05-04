@@ -21,7 +21,7 @@ data class NewCheckedOrder(
   val comment: String,
 )
 
-object CheckedOrders : Table() {
+object CheckedOrders : Table("checked_orders") {
   override val primaryKey: PrimaryKey
     get() = PrimaryKey(checkedOrderId)
   val checkedOrderId = integer("checked_order_id").autoIncrement()

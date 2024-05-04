@@ -23,7 +23,7 @@ data class NewCutOrder(
   val comment: String,
 )
 
-object CutOrders : Table() {
+object CutOrders : Table("cut_orders") {
   override val primaryKey: PrimaryKey
     get() = PrimaryKey(cutOrderId)
   val cutOrderId = integer("cut_order_id").autoIncrement()

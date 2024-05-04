@@ -1,6 +1,8 @@
 package com.kenkoro.taurus.api.client.services
 
 import com.kenkoro.taurus.api.client.core.exceptions.EnvException
+import com.kenkoro.taurus.api.client.models.CheckedOrders
+import com.kenkoro.taurus.api.client.models.CutOrders
 import com.kenkoro.taurus.api.client.models.Orders
 import com.kenkoro.taurus.api.client.models.Users
 import com.kenkoro.taurus.api.client.services.DbService.credentials
@@ -41,6 +43,8 @@ object DbService {
       SchemaUtils.create(
         Orders,
         Users,
+        CutOrders,
+        CheckedOrders,
       )
     }
   }
