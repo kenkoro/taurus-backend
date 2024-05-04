@@ -37,8 +37,10 @@ data class NewOrder(
 )
 
 object Orders : Table() {
-  val recordId = integer("record_id").autoIncrement().uniqueIndex()
-  val orderId = integer("order_id")
+  override val primaryKey: PrimaryKey
+    get() = PrimaryKey(recordId)
+  val recordId = integer("record_id").autoIncrement()
+  val orderId = integer("order_id").uniqueIndex()
   val customer = varchar("customer", 128)
   val date = long("date")
   val title = varchar("title", 128)

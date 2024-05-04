@@ -64,7 +64,9 @@ fun NewUser.setHashedPassword(password: String): NewUser = this.copy(
 )
 
 object Users : Table() {
-  val userId = integer("user_id").autoIncrement().uniqueIndex()
+  override val primaryKey: PrimaryKey
+    get() = PrimaryKey(userId)
+  val userId = integer("user_id").autoIncrement()
   val subject = varchar("subject", 32)
   val password = varchar("password", 255)
   val image = varchar("image", 128)
