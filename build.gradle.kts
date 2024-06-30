@@ -1,3 +1,5 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 val ktor: String by project
 val kotlin: String by project
 val logback: String by project
@@ -9,10 +11,27 @@ plugins {
   kotlin("jvm") version "1.9.22"
   id("io.ktor.plugin") version "2.3.7"
   id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
+  id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
+subprojects {
+  apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+  configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    android.set(true)
+    verbose.set(true)
+    reporters {
+      reporter(ReporterType.PLAIN)
+      reporter(ReporterType.CHECKSTYLE)
+      reporter(ReporterType.JSON)
+    }
+  }
+}
+
+tasks["check"].finalizedBy(tasks["ktlintCheck"])
+
 group = "com.kenkoro.taurus.api.client"
-version = "0.0.1"
+version = "0.1.0"
 
 application {
   mainClass.set("io.ktor.server.netty.EngineMain")

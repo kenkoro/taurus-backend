@@ -4,23 +4,25 @@ import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
 import com.kenkoro.taurus.api.client.models.NewOrder
 import com.kenkoro.taurus.api.client.routes.util.Validator
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.request.receiveNullable
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.post
 
 fun Route.addNewOrder(
   controller: OrderController,
-  config: TokenConfig
+  config: TokenConfig,
 ) {
   authenticate(config.authName) {
     post("/add-new/order") {
-      val newOrder = call.receiveNullable<NewOrder>() ?: run {
-        call.respond(HttpStatusCode.BadRequest)
-        return@post
-      }
+      val newOrder =
+        call.receiveNullable<NewOrder>() ?: run {
+          call.respond(HttpStatusCode.BadRequest)
+          return@post
+        }
 
       if (!Validator.isNewOrderValid(newOrder)) {
         call.respond(HttpStatusCode.Conflict, "Request has blank data")
@@ -35,7 +37,7 @@ fun Route.addNewOrder(
 
       call.respond(
         status = HttpStatusCode.Created,
-        message = addedOrder
+        message = addedOrder,
       )
     }
   }

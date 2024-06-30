@@ -56,7 +56,8 @@ object DbService {
     val url = System.getenv("PSQL_URL") ?: throw EnvException("Testing url wasn't provided")
     val user = System.getenv("PSQL_USER") ?: throw EnvException("Testing user wasn't provided")
     val password =
-      System.getenv("PSQL_PASSWORD") ?: throw EnvException("Password for testing user wasn't provided")
+      System.getenv("PSQL_PASSWORD")
+        ?: throw EnvException("Password for testing user wasn't provided")
 
     return Triple(PsqlUrl(url), PsqlUser(user), PsqlPassword(password))
   }

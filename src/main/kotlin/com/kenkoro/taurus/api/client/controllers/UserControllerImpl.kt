@@ -13,7 +13,14 @@ class UserControllerImpl(
 
   override suspend fun user(subject: String): User? = dao.user(subject)
 
-  override suspend fun addNewUser(user: NewUser, saltWrapper: SaltWrapper): User? = dao.addNewUser(user, saltWrapper)
+  override suspend fun addNewUser(
+    user: NewUser,
+    saltWrapper: SaltWrapper,
+  ): User? =
+    dao.addNewUser(
+      user,
+      saltWrapper,
+    )
 
   override suspend fun deleteUser(id: Int): Boolean = dao.deleteUser(id)
 
@@ -21,5 +28,12 @@ class UserControllerImpl(
 
   override suspend fun allUsers(): List<User> = dao.allUsers()
 
-  override suspend fun editUser(subject: String, user: NewUser): Boolean = dao.editUser(subject, user)
+  override suspend fun editUser(
+    subject: String,
+    user: NewUser,
+  ): Boolean =
+    dao.editUser(
+      subject,
+      user,
+    )
 }

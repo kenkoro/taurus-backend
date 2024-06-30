@@ -9,19 +9,25 @@ object HashingAlgorithm {
 }
 
 class SHA256HashingService : HashingService {
-  override fun hash(password: String, saltLength: Int): SaltedHash {
+  override fun hash(
+    password: String,
+    saltLength: Int,
+  ): SaltedHash {
     val salt = SecureRandom.getInstance(HashingAlgorithm.SHA1PRNG).generateSeed(saltLength)
     val saltAsHex = Hex.encodeHexString(salt)
-    val hash = DigestUtils.sha256Hex("${saltAsHex}${password}")
+    val hash = DigestUtils.sha256Hex("${saltAsHex}$password")
 
     return SaltedHash(
       hashedPasswordWithSalt = hash,
-      salt = saltAsHex
+      salt = saltAsHex,
     )
   }
 
-  override fun verify(password: String, saltedHash: SaltedHash): Boolean {
-    val hash = DigestUtils.sha256Hex("${saltedHash.salt}${password}")
+  override fun verify(
+    password: String,
+    saltedHash: SaltedHash,
+  ): Boolean {
+    val hash = DigestUtils.sha256Hex("${saltedHash.salt}$password")
     return hash == saltedHash.hashedPasswordWithSalt
   }
 }

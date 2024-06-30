@@ -2,22 +2,24 @@ package com.kenkoro.taurus.api.client.routes.order
 
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
 
 fun Route.getOrder(
   controller: OrderController,
-  config: TokenConfig
+  config: TokenConfig,
 ) {
   authenticate(config.authName) {
     get("/order/{order_id?}") {
-      val orderId = call.parameters["order_id"]?.toIntOrNull() ?: run {
-        call.respond(HttpStatusCode.BadRequest, "The order id is null")
-        return@get
-      }
+      val orderId =
+        call.parameters["order_id"]?.toIntOrNull() ?: run {
+          call.respond(HttpStatusCode.BadRequest, "The order id is null")
+          return@get
+        }
 
       val fetchedOrder = controller.order(orderId)
       if (fetchedOrder == null) {
@@ -27,7 +29,7 @@ fun Route.getOrder(
 
       call.respond(
         status = HttpStatusCode.OK,
-        message = fetchedOrder
+        message = fetchedOrder,
       )
     }
   }

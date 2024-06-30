@@ -1,1 +1,1 @@
-rootProject.name = "taurus-restful-api"
+rootProject.name = "taurus-backend"

@@ -24,7 +24,10 @@ object SaltWrapperSerializer : KSerializer<SaltWrapper> {
   override val descriptor: SerialDescriptor
     get() = PrimitiveSerialDescriptor("Salt", PrimitiveKind.STRING)
 
-  override fun serialize(encoder: Encoder, value: SaltWrapper) {
+  override fun serialize(
+    encoder: Encoder,
+    value: SaltWrapper,
+  ) {
     encoder.encodeString(value.salt)
   }
 }
@@ -53,15 +56,16 @@ data class NewUser(
   val profile: UserProfile,
 )
 
-fun NewUser.setHashedPassword(password: String): NewUser = this.copy(
-  subject = subject,
-  password = password,
-  image = image,
-  firstName = firstName,
-  lastName = lastName,
-  email = email,
-  profile = profile
-)
+fun NewUser.setHashedPassword(password: String): NewUser =
+  this.copy(
+    subject = subject,
+    password = password,
+    image = image,
+    firstName = firstName,
+    lastName = lastName,
+    email = email,
+    profile = profile,
+  )
 
 object Users : Table() {
   override val primaryKey: PrimaryKey

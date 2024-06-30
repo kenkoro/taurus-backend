@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PaginatedOrders(
   @SerialName("paginated_orders") val paginatedOrders: List<Order>,
-  @SerialName("has_next_page") val hasNextPage: Boolean
+  @SerialName("has_next_page") val hasNextPage: Boolean,
 )

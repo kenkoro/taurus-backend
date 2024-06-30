@@ -16,7 +16,21 @@ class OrderControllerImpl(
 
   override suspend fun allOrders(): List<Order> = dao.allOrders()
 
-  override suspend fun paginatedOrders(offset: Long, perPage: Int): List<Order> = dao.paginatedOrders(offset, perPage)
+  override suspend fun paginatedOrders(
+    offset: Long,
+    perPage: Int,
+  ): List<Order> =
+    dao.paginatedOrders(
+      offset,
+      perPage,
+    )
 
-  override suspend fun editOrder(orderId: Int, order: NewOrder): Boolean = dao.editOrder(orderId, order)
+  override suspend fun editOrder(
+    orderId: Int,
+    order: NewOrder,
+  ): Boolean =
+    dao.editOrder(
+      orderId,
+      order,
+    )
 }

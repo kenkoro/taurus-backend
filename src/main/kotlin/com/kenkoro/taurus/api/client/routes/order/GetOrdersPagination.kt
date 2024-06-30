@@ -3,15 +3,16 @@ package com.kenkoro.taurus.api.client.routes.order
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
 import com.kenkoro.taurus.api.client.models.util.PaginatedOrders
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
 
 fun Route.getOrders(
   controller: OrderController,
-  config: TokenConfig
+  config: TokenConfig,
 ) {
   authenticate(config.authName) {
     get("/orders") {
@@ -24,7 +25,7 @@ fun Route.getOrders(
 
       call.respond(
         status = HttpStatusCode.OK,
-        message = PaginatedOrders(paginatedOrders, hasNextPage)
+        message = PaginatedOrders(paginatedOrders, hasNextPage),
       )
     }
   }
