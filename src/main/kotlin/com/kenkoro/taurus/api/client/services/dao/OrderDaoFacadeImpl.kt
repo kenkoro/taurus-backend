@@ -42,7 +42,6 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
     )
 
   private fun UpdateBuilder<*>.setOrderFields(order: NewOrder) {
-    this[orderId] = order.orderId
     this[customer] = order.customer
     this[title] = order.title
     this[model] = order.model
@@ -63,10 +62,22 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
         .singleOrNull()
     }
 
+  private suspend fun autoIncAndResetOrderId(): Int =
+    dbQuery {
+      val currentOrderId = Orders.select(orderId).map { it[orderId] }.last()
+      if (currentOrderId < 1000) {
+        currentOrderId + 1
+      } else {
+        1
+      }
+    }
+
   override suspend fun addNewOrder(order: NewOrder): Order? =
     dbQuery {
+      val newOrderId = autoIncAndResetOrderId()
       val insertStatement =
         Orders.insertIgnore {
+          it[orderId] = newOrderId
           it[date] = System.currentTimeMillis()
           it.setOrderFields(order)
         }

@@ -30,7 +30,7 @@ fun Route.editOrder(
           call.respond(HttpStatusCode.BadRequest)
           return@put
         }
-      val oldOrderId =
+      val orderId =
         call.parameters["order_id"]?.toIntOrNull() ?: run {
           call.respond(HttpStatusCode.BadRequest, "You need to specify a concrete order to edit")
           return@put
@@ -58,7 +58,7 @@ fun Route.editOrder(
           return@put
         }
 
-        val wasAcknowledged = orderController.editOrder(oldOrderId, newOrder)
+        val wasAcknowledged = orderController.editOrder(orderId, newOrder)
         if (!wasAcknowledged) {
           call.respond(
             HttpStatusCode.InternalServerError,

@@ -5,8 +5,7 @@ import com.kenkoro.taurus.api.client.models.NewUser
 
 object Validator {
   fun isNewOrderValid(order: NewOrder): Boolean {
-    return order.orderId > 0 &&
-      order.customer.isNotBlank() &&
+    return order.customer.isNotBlank() &&
       order.title.isNotBlank() &&
       order.model.isNotBlank() &&
       order.size.isNotBlank() &&
