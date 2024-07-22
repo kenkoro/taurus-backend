@@ -68,14 +68,13 @@ fun Route.editOrder(
         }
 
         if (
-          seeIfOrderStatusChangedToCut(newOrder.status, oldOrderStatus) &&
-          editor.profile == Cutter
+          isOrderStatusWasChangedToCut(newOrder.status, oldOrderStatus) &&
+          isCutter(editor.profile)
         ) {
           val addedCutOrder =
             cutOrderController.addNewCutOrder(
               NewCutOrder(
                 orderId = orderId,
-                date = 0L,
                 quantity = newOrder.quantity,
                 cutterId = editor.userId,
                 comment = "",
@@ -110,9 +109,11 @@ private fun isAllowedToEdit(userProfile: UserProfile): Boolean {
     userProfile == Inspector
 }
 
-private fun seeIfOrderStatusChangedToCut(
+private fun isOrderStatusWasChangedToCut(
   newStatus: OrderStatus,
   oldStatus: OrderStatus,
 ): Boolean {
   return oldStatus == OrderStatus.Idle && newStatus == OrderStatus.Cut
 }
+
+private fun isCutter(profile: UserProfile) = profile == Cutter
