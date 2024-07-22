@@ -22,7 +22,7 @@ fun Application.configureOrderRouting(
   routing {
     addNewOrder(orderController, config)
     deleteOrder(userController, orderController, config)
-    getOrder(orderController, config)
+    getOrder(orderController, cutOrderController, config)
     getOrders(orderController, config)
     editOrder(userController, orderController, cutOrderController, config)
   }
