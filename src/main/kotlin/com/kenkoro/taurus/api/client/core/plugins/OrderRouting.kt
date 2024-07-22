@@ -1,5 +1,6 @@
 package com.kenkoro.taurus.api.client.core.plugins
 
+import com.kenkoro.taurus.api.client.controllers.CutOrderController
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.JwtTokenConfigService
@@ -14,6 +15,7 @@ import io.ktor.server.routing.routing
 fun Application.configureOrderRouting(
   userController: UserController,
   orderController: OrderController,
+  cutOrderController: CutOrderController,
 ) {
   val config = JwtTokenConfigService.config()
 
@@ -22,6 +24,6 @@ fun Application.configureOrderRouting(
     deleteOrder(userController, orderController, config)
     getOrder(orderController, config)
     getOrders(orderController, config)
-    editOrder(userController, orderController, config)
+    editOrder(userController, orderController, cutOrderController, config)
   }
 }
