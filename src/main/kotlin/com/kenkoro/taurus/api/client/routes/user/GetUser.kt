@@ -10,7 +10,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 
 fun Route.getUser(
-  controller: UserController,
+  userController: UserController,
   config: TokenConfig,
 ) {
   authenticate(config.authName) {
@@ -21,7 +21,7 @@ fun Route.getUser(
           return@get
         }
 
-      val fetchedUser = controller.user(subject)
+      val fetchedUser = userController.user(subject)
       if (fetchedUser == null) {
         call.respond(HttpStatusCode.BadRequest, "User is not found")
         return@get

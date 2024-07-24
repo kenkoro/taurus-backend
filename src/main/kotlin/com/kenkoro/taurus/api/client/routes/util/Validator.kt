@@ -1,5 +1,6 @@
 package com.kenkoro.taurus.api.client.routes.util
 
+import com.kenkoro.taurus.api.client.models.NewCutOrder
 import com.kenkoro.taurus.api.client.models.NewOrder
 import com.kenkoro.taurus.api.client.models.NewUser
 
@@ -21,5 +22,9 @@ object Validator {
       user.email.isNotBlank() &&
       user.image.isNotBlank() &&
       user.profile.name.isNotBlank()
+  }
+
+  fun isNewCutOrderValid(cutOrder: NewCutOrder): Boolean {
+    return cutOrder.quantity > 0
   }
 }

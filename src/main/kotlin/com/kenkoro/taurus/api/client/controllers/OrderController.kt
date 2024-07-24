@@ -17,8 +17,5 @@ interface OrderController {
     perPage: Int,
   ): List<Order>
 
-  suspend fun editOrder(
-    orderId: Int,
-    order: NewOrder,
-  ): Boolean
+  suspend fun editOrder(order: NewOrder): Boolean
 }

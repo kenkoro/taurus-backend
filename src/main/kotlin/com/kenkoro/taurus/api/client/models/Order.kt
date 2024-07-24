@@ -24,6 +24,7 @@ data class Order(
 
 @Serializable
 data class NewOrder(
+  @SerialName("order_id") val orderId: Int,
   val customer: String,
   val title: String,
   val model: String,

@@ -15,5 +15,6 @@ fun Application.configureRouting() {
 
   configureAuthRouting(userController)
   configureUserRouting(userController)
-  configureOrderRouting(userController, orderController, cutOrderController)
+  configureOrderRouting(userController, orderController)
+  configureCutOrderRouting(cutOrderController)
 }

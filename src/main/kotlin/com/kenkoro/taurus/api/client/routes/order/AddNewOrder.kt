@@ -13,7 +13,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 
 fun Route.addNewOrder(
-  controller: OrderController,
+  orderController: OrderController,
   config: TokenConfig,
 ) {
   authenticate(config.authName) {
@@ -29,7 +29,7 @@ fun Route.addNewOrder(
         return@post
       }
 
-      val addedOrder = controller.addNewOrder(newOrder)
+      val addedOrder = orderController.addNewOrder(newOrder)
       if (addedOrder == null) {
         call.respond(HttpStatusCode.InternalServerError, "Failed to push the new order")
         return@post

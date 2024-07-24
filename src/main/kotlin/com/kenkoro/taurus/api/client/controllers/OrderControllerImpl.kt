@@ -25,12 +25,5 @@ class OrderControllerImpl(
       perPage,
     )
 
-  override suspend fun editOrder(
-    orderId: Int,
-    order: NewOrder,
-  ): Boolean =
-    dao.editOrder(
-      orderId,
-      order,
-    )
+  override suspend fun editOrder(order: NewOrder): Boolean = dao.editOrder(order)
 }

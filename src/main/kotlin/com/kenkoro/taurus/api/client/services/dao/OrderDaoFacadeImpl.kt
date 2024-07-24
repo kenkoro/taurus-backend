@@ -102,12 +102,9 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
       Orders.selectAll().limit(n = perPage, offset = offset).map(::resultRowToOrder)
     }
 
-  override suspend fun editOrder(
-    orderId: Int,
-    order: NewOrder,
-  ): Boolean =
+  override suspend fun editOrder(order: NewOrder): Boolean =
     dbQuery {
-      Orders.update({ Orders.orderId eq orderId }) {
+      Orders.update({ orderId eq order.orderId }) {
         it.setOrderFields(order)
       } > 0
     }

@@ -13,7 +13,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
 
 fun Route.deleteUser(
-  controller: UserController,
+  userController: UserController,
   config: TokenConfig,
 ) {
   authenticate(config.authName) {
@@ -29,7 +29,7 @@ fun Route.deleteUser(
           return@delete
         }
       val deleterProfile =
-        controller.user(deleterSubject)?.profile ?: run {
+        userController.user(deleterSubject)?.profile ?: run {
           call.respond(HttpStatusCode.NotFound, "The user who's deleting this user is not found")
           return@delete
         }
@@ -46,7 +46,7 @@ fun Route.deleteUser(
         return@delete
       }
 
-      val wasAcknowledged = controller.deleteUser(subject)
+      val wasAcknowledged = userController.deleteUser(subject)
       if (!wasAcknowledged) {
         call.respond(HttpStatusCode.InternalServerError, "Failed to delete the user")
         return@delete

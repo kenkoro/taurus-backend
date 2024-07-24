@@ -1,12 +1,9 @@
 package com.kenkoro.taurus.api.client.routes.order
 
-import com.kenkoro.taurus.api.client.controllers.CutOrderController
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.NewCutOrder
 import com.kenkoro.taurus.api.client.models.NewOrder
-import com.kenkoro.taurus.api.client.models.enums.OrderStatus
 import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.models.enums.UserProfile.Admin
 import com.kenkoro.taurus.api.client.models.enums.UserProfile.Customer
@@ -24,7 +21,6 @@ import io.ktor.server.routing.put
 fun Route.editOrder(
   userController: UserController,
   orderController: OrderController,
-  cutOrderController: CutOrderController,
   config: TokenConfig,
 ) {
   authenticate(config.authName) {
@@ -32,11 +28,6 @@ fun Route.editOrder(
       val newOrder =
         call.receiveNullable<NewOrder>() ?: run {
           call.respond(HttpStatusCode.BadRequest)
-          return@put
-        }
-      val orderId =
-        call.parameters["order_id"]?.toIntOrNull() ?: run {
-          call.respond(HttpStatusCode.BadRequest, "You need to specify a concrete order to edit")
           return@put
         }
       val editorSubject =
@@ -47,11 +38,6 @@ fun Route.editOrder(
       val editor =
         userController.user(editorSubject) ?: run {
           call.respond(HttpStatusCode.NotFound, "The user who's editing this order is not found")
-          return@put
-        }
-      val oldOrderStatus =
-        orderController.order(orderId)?.status ?: run {
-          call.respond(HttpStatusCode.NotFound, "The order status not found")
           return@put
         }
 
@@ -67,27 +53,7 @@ fun Route.editOrder(
           return@put
         }
 
-        if (
-          isOrderStatusWasChangedToCut(newOrder.status, oldOrderStatus) &&
-          isCutter(editor.profile)
-        ) {
-          val addedCutOrder =
-            cutOrderController.addNewCutOrder(
-              NewCutOrder(
-                orderId = orderId,
-                quantity = newOrder.quantity,
-                cutterId = editor.userId,
-                comment = "",
-              ),
-            )
-
-          if (addedCutOrder == null) {
-            call.respond(HttpStatusCode.Conflict, "Can't add new cut order")
-            return@put
-          }
-        }
-
-        val wasAcknowledged = orderController.editOrder(orderId, newOrder)
+        val wasAcknowledged = orderController.editOrder(newOrder)
         if (!wasAcknowledged) {
           call.respond(
             HttpStatusCode.InternalServerError,
@@ -108,12 +74,3 @@ private fun isAllowedToEdit(userProfile: UserProfile): Boolean {
     userProfile == Cutter ||
     userProfile == Inspector
 }
-
-private fun isOrderStatusWasChangedToCut(
-  newStatus: OrderStatus,
-  oldStatus: OrderStatus,
-): Boolean {
-  return oldStatus == OrderStatus.Idle && newStatus == OrderStatus.Cut
-}
-
-private fun isCutter(profile: UserProfile) = profile == Cutter

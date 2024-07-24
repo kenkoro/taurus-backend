@@ -16,7 +16,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.put
 
 fun Route.editUser(
-  controller: UserController,
+  userController: UserController,
   hashingService: HashingService,
   config: TokenConfig,
 ) {
@@ -38,7 +38,7 @@ fun Route.editUser(
           return@put
         }
       val editorProfile =
-        controller.user(editorSubject)?.profile ?: run {
+        userController.user(editorSubject)?.profile ?: run {
           call.respond(HttpStatusCode.NotFound, "The user who's editing this user is not found")
           return@put
         }
@@ -56,7 +56,7 @@ fun Route.editUser(
           return@put
         }
 
-        val wasAcknowledged = controller.editUser(oldUserSubject, newUserWithHashedPassword)
+        val wasAcknowledged = userController.editUser(oldUserSubject, newUserWithHashedPassword)
         if (!wasAcknowledged) {
           call.respond(
             HttpStatusCode.InternalServerError,

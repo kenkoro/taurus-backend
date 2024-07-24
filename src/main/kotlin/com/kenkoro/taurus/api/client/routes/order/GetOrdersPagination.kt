@@ -11,7 +11,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 
 fun Route.getOrders(
-  controller: OrderController,
+  orderController: OrderController,
   config: TokenConfig,
 ) {
   authenticate(config.authName) {
@@ -19,7 +19,7 @@ fun Route.getOrders(
       val page = call.parameters["page"]?.toIntOrNull() ?: 1
       val perPage = call.parameters["per_page"]?.toIntOrNull() ?: 10
       val offset = (page - 1) * perPage
-      val paginatedOrders = controller.paginatedOrders(offset.toLong(), perPage)
+      val paginatedOrders = orderController.paginatedOrders(offset.toLong(), perPage)
 
       val hasNextPage = paginatedOrders.size >= perPage
 

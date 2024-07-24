@@ -16,7 +16,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 
 fun Route.login(
-  controller: UserController,
+  userController: UserController,
   hashingService: HashingService,
   config: TokenConfig,
 ) {
@@ -27,7 +27,7 @@ fun Route.login(
         return@post
       }
 
-    val user = controller.user(request.subject)
+    val user = userController.user(request.subject)
     if (user == null) {
       call.respond(HttpStatusCode.BadRequest, "User is not found")
       return@post

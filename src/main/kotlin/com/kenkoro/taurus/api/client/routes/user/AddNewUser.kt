@@ -15,7 +15,7 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 
 fun Route.createUser(
-  controller: UserController,
+  userController: UserController,
   hashingService: HashingService,
 ) {
   post("/add-new/user") {
@@ -30,7 +30,7 @@ fun Route.createUser(
         return@post
       }
     val creatorProfile =
-      controller.user(creatorSubject)?.profile ?: run {
+      userController.user(creatorSubject)?.profile ?: run {
         call.respond(HttpStatusCode.NotFound, "The user who's creating this user is not found")
         return@post
       }
@@ -50,7 +50,7 @@ fun Route.createUser(
           saltedHash.hashedPasswordWithSalt,
         )
       val addedUser =
-        controller.addNewUser(
+        userController.addNewUser(
           newUserWithHashedPassword,
           SaltWrapper(saltedHash.salt),
         )
