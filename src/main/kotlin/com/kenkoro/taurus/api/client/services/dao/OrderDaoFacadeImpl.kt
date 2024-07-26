@@ -97,9 +97,21 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
   override suspend fun paginatedOrders(
     offset: Long,
     perPage: Int,
+    phrase: String,
   ): List<Order> =
     dbQuery {
-      Orders.selectAll().limit(n = perPage, offset = offset).map(::resultRowToOrder)
+      Orders
+        .selectAll()
+        .where {
+          /** Not good for big databases to use like function in sql */
+          if (phrase.isDigitsOnly()) {
+            orderId eq phrase.toInt()
+          } else {
+            title like "%${phrase.trim()}%"
+          }
+        }
+        .limit(n = perPage, offset = offset)
+        .map(::resultRowToOrder)
     }
 
   override suspend fun editOrder(order: NewOrder): Boolean =
@@ -108,4 +120,14 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
         it.setOrderFields(order)
       } > 0
     }
+}
+
+fun String.isDigitsOnly(): Boolean {
+  if (this.isEmpty()) return false
+
+  for (char in this) {
+    if (!char.isDigit()) return false
+  }
+
+  return true
 }

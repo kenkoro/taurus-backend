@@ -18,8 +18,14 @@ fun Route.getOrders(
     get("/orders") {
       val page = call.parameters["page"]?.toIntOrNull() ?: 1
       val perPage = call.parameters["per_page"]?.toIntOrNull() ?: 10
+      val searchPhrase = call.parameters["filter"] ?: ""
       val offset = (page - 1) * perPage
-      val paginatedOrders = orderController.paginatedOrders(offset.toLong(), perPage)
+      val paginatedOrders =
+        orderController.paginatedOrders(
+          offset = offset.toLong(),
+          perPage = perPage,
+          phrase = searchPhrase,
+        )
 
       val hasNextPage = paginatedOrders.size >= perPage
 

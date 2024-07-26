@@ -15,6 +15,7 @@ interface OrderDaoFacade {
   suspend fun paginatedOrders(
     offset: Long,
     perPage: Int,
+    phrase: String = "",
   ): List<Order>
 
   suspend fun editOrder(order: NewOrder): Boolean
