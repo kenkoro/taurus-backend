@@ -17,6 +17,7 @@ data class CutOrder(
 @Serializable
 data class NewCutOrder(
   @SerialName("order_id") val orderId: Int,
+  val date: Long,
   val quantity: Int,
   @SerialName("cutter_id") val cutterId: Int,
   val comment: String,
