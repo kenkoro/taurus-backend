@@ -37,7 +37,7 @@ fun Route.addNewCutOrder(
 
       call.respond(
         status = HttpStatusCode.Created,
-        message = newCutOrder,
+        message = addedCutOrder,
       )
     }
   }
