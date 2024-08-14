@@ -16,6 +16,8 @@ import com.kenkoro.taurus.api.client.models.Orders.size
 import com.kenkoro.taurus.api.client.models.Orders.status
 import com.kenkoro.taurus.api.client.models.Orders.title
 import com.kenkoro.taurus.api.client.services.DbService.dbQuery
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -23,6 +25,8 @@ import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.update
+import java.io.File
+import java.io.FileOutputStream
 
 class OrderDaoFacadeImpl : OrderDaoFacade {
   private fun resultRowToOrder(row: ResultRow) =
@@ -62,19 +66,43 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
         .singleOrNull()
     }
 
-  private suspend fun autoIncAndResetOrderId(): Int =
+  private suspend fun autoIncOrderIdAndResetItIfNeeded(): Int =
     dbQuery {
+      val firstOrderId = 1
       val currentOrderId = Orders.select(orderId).map { it[orderId] }.last()
       if (currentOrderId < 1000) {
         currentOrderId + 1
       } else {
-        1
+        backUpOrdersInfo()
+        resetOrders()
+
+        firstOrderId
       }
     }
 
+  private suspend fun backUpOrdersInfo() {
+    val orders = allOrders()
+    val backUpFile = File("backup/${System.currentTimeMillis()}-ms.txt")
+
+    withContext(Dispatchers.IO) {
+      if (!backUpFile.exists()) {
+        backUpFile.createNewFile()
+      }
+
+      val fos = FileOutputStream(backUpFile)
+      for (order in orders) {
+        fos.write(order.toString().toByteArray())
+      }
+    }
+  }
+
+  private suspend fun resetOrders() {
+    (1..1000).map { deleteOrder(it) }
+  }
+
   override suspend fun addNewOrder(order: NewOrder): Order? =
     dbQuery {
-      val newOrderId = autoIncAndResetOrderId()
+      val newOrderId = autoIncOrderIdAndResetItIfNeeded()
       val insertStatement =
         Orders.insertIgnore {
           it[orderId] = newOrderId
