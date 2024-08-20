@@ -31,7 +31,7 @@ subprojects {
 tasks["check"].finalizedBy(tasks["ktlintCheck"])
 
 group = "com.kenkoro.taurus.api.client"
-version = "0.1.0"
+version = "0.2.0"
 
 application {
   mainClass.set("io.ktor.server.netty.EngineMain")
