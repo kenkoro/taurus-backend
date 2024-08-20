@@ -1,7 +1,6 @@
 #!/bin/zsh
 
-export PGPASSWORD=kenkoro
-psql -U kenkoro> -d postgres << EOF
+psql -U "$PSQL_USER"> -d postgres << EOF
   create database taurus;
   \c taurus
   begin;
