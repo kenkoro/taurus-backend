@@ -1,5 +1,6 @@
 package com.kenkoro.taurus.api.client.services.dao
 
+import com.kenkoro.taurus.api.client.models.EditOrder
 import com.kenkoro.taurus.api.client.models.NewOrder
 import com.kenkoro.taurus.api.client.models.Order
 import com.kenkoro.taurus.api.client.models.Orders
@@ -69,7 +70,13 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
   private suspend fun autoIncOrderIdAndResetItIfNeeded(): Int =
     dbQuery {
       val firstOrderId = 1
-      val currentOrderId = Orders.select(orderId).map { it[orderId] }.last()
+      val currentOrderId =
+        try {
+          Orders.select(orderId).map { it[orderId] }.last()
+        } catch (_: NoSuchElementException) {
+          0
+        }
+
       if (currentOrderId < 1000) {
         currentOrderId + 1
       } else {
@@ -142,12 +149,26 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
         .map(::resultRowToOrder)
     }
 
-  override suspend fun editOrder(order: NewOrder): Boolean =
+  override suspend fun editOrder(order: EditOrder): Boolean =
     dbQuery {
       Orders.update({ orderId eq order.orderId }) {
-        it.setOrderFields(order)
+        it.setOrderFields(order.toNewOrder())
       } > 0
     }
+}
+
+private fun EditOrder.toNewOrder(): NewOrder {
+  return NewOrder(
+    customer = customer,
+    title = title,
+    model = model,
+    size = size,
+    color = color,
+    category = category,
+    quantity = quantity,
+    status = status,
+    creatorId = creatorId,
+  )
 }
 
 fun String.isDigitsOnly(): Boolean {

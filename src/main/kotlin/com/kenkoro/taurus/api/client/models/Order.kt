@@ -23,8 +23,21 @@ data class Order(
 )
 
 @Serializable
-data class NewOrder(
+data class EditOrder(
   @SerialName("order_id") val orderId: Int,
+  val customer: String,
+  val title: String,
+  val model: String,
+  val size: String,
+  val color: String,
+  val category: String,
+  val quantity: Int,
+  val status: OrderStatus,
+  @SerialName("creator_id") val creatorId: Int,
+)
+
+@Serializable
+data class NewOrder(
   val customer: String,
   val title: String,
   val model: String,

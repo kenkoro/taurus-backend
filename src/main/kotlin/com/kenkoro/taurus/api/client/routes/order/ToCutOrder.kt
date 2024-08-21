@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.routes.order
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.NewOrder
+import com.kenkoro.taurus.api.client.models.EditOrder
 import com.kenkoro.taurus.api.client.models.enums.OrderStatus
 import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import io.ktor.http.HttpStatusCode
@@ -47,7 +47,7 @@ fun Route.toCutOrder(
         }
         val wasAcknowledged =
           orderController.editOrder(
-            NewOrder(
+            EditOrder(
               orderId = orderToEdit.orderId,
               customer = orderToEdit.customer,
               title = orderToEdit.title,

@@ -1,5 +1,6 @@
 package com.kenkoro.taurus.api.client.controllers
 
+import com.kenkoro.taurus.api.client.models.EditOrder
 import com.kenkoro.taurus.api.client.models.NewOrder
 import com.kenkoro.taurus.api.client.models.Order
 
@@ -18,5 +19,5 @@ interface OrderController {
     phrase: String = "",
   ): List<Order>
 
-  suspend fun editOrder(order: NewOrder): Boolean
+  suspend fun editOrder(order: EditOrder): Boolean
 }

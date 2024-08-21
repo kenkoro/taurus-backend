@@ -3,7 +3,7 @@ package com.kenkoro.taurus.api.client.routes.order
 import com.kenkoro.taurus.api.client.controllers.OrderController
 import com.kenkoro.taurus.api.client.controllers.UserController
 import com.kenkoro.taurus.api.client.core.security.token.TokenConfig
-import com.kenkoro.taurus.api.client.models.NewOrder
+import com.kenkoro.taurus.api.client.models.EditOrder
 import com.kenkoro.taurus.api.client.models.enums.UserProfile
 import com.kenkoro.taurus.api.client.models.enums.UserProfile.Admin
 import com.kenkoro.taurus.api.client.models.enums.UserProfile.Customer
@@ -26,7 +26,7 @@ fun Route.editOrder(
   authenticate(config.authName) {
     put("/edit/order") {
       val newOrder =
-        call.receiveNullable<NewOrder>() ?: run {
+        call.receiveNullable<EditOrder>() ?: run {
           call.respond(HttpStatusCode.BadRequest)
           return@put
         }
@@ -48,7 +48,7 @@ fun Route.editOrder(
         )
         return@put
       } else {
-        if (!Validator.isNewOrderValid(newOrder)) {
+        if (!Validator.isEditOrderValid(newOrder)) {
           call.respond(HttpStatusCode.Conflict, "Request has blank data")
           return@put
         }
