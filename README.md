@@ -8,8 +8,7 @@ Because it'll be overhead, you just need to fetch new updates and restart the se
 
 ### New things to come
 
-- [X] https
-- [ ] plain script to run `jar` file
+- [X] ~https~
 - [ ] wrap e2e tests up
 - [ ] unit/integration tests
 - [ ] CI/CD, especially deployment
