@@ -16,7 +16,7 @@ fun Application.configureUserRouting(userController: UserController) {
   val config = JwtTokenConfigService.config()
 
   routing {
-    createUser(userController, hashingService)
+    createUser(userController, hashingService, config)
     getUser(userController, config)
     editUser(userController, hashingService, config)
     deleteUser(userController, config)
