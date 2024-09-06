@@ -1,5 +1,7 @@
 package com.kenkoro.taurus.api.client.services.dao
 
+import com.kenkoro.taurus.api.client.models.CheckedOrders
+import com.kenkoro.taurus.api.client.models.CutOrders
 import com.kenkoro.taurus.api.client.models.EditOrder
 import com.kenkoro.taurus.api.client.models.NewOrder
 import com.kenkoro.taurus.api.client.models.Order
@@ -21,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.selectAll
@@ -121,7 +124,11 @@ class OrderDaoFacadeImpl : OrderDaoFacade {
 
   override suspend fun deleteOrder(id: Int): Boolean =
     dbQuery {
-      Orders.deleteWhere { orderId eq id } > 0
+      val checkedOrderDeletionResult = CheckedOrders.deleteWhere { checkedOrderId eq id } > 0
+      val cutOrderDeletionResult = CutOrders.deleteWhere { cutOrderId eq id } > 0
+      val orderDeletionResult = Orders.deleteWhere { orderId eq id } > 0
+
+      orderDeletionResult
     }
 
   override suspend fun allOrders(): List<Order> =
